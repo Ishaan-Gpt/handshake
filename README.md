@@ -136,6 +136,10 @@ Then sign in at http://localhost:8065 (passwords are printed by `join.py`) and t
 `@handshake open a deal with @them about whatever you're agreeing`. Or watch a whole deal play out by itself:
 `python scripts/demo.py` (Priya and Tomas, two sample people, agree a design retainer at $86K in about 80 seconds).
 
+No model installed? It still runs: if the wording model is missing or errors, each message falls back to a plain template
+(`handshake/brain.py`), and `HANDSHAKE_BRAIN=plain` skips the attempt. The numbers always come from plain code, so a deal
+closes the same either way; only the wording changes. (Read from the code; the offline path is `python scripts/simulate.py`.)
+
 More: `python scripts/leak_test.py` (the 80 attacks), `python scripts/crash_drill.py` (kill the negotiators mid-deal),
 `python -m pytest tests` (25 tests, also run by CI on every push), `python scripts/public.py <tunnel url>` + `python scripts/live.py` (open the lobby
 and tables to visitors, who can watch and try ordering an agent about). The message-wording brain is

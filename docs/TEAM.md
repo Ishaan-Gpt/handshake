@@ -15,6 +15,11 @@ Everything else is free: claim it here first.
 
 ## Log
 
+### 21:25 IST, Tab (Vignesh's assistant)
+
+README, Run section: one note saying the project runs with no model installed (template fallback in `handshake/brain.py`,
+`HANDSHAKE_BRAIN=plain` to skip). Read from the code, not run on a live stack. Files touched: `README.md`, `docs/TEAM.md`.
+
 ### 21:10 IST, Tab (Vignesh's assistant)
 
 README: added a "Results" section that tabulates the committed leak-test and crash-drill logs (numbers copied from
