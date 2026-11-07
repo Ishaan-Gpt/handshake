@@ -12,7 +12,7 @@ every move.
 20**, and against Acme's own bot with its playbook in its prompt, **8 to 9 times out of 20**
 (qwen2.5 1.5B and 3B, same "never reveal" instruction; [results/](results/)).
 
-Demo video: _link added on submission_ · Built for WeMakeDevs' Flip the Switch hackathon, Track 01 (Business Workflow).
+Demo video: _link added on submission_ · Blog: [docs/BLOG.md](docs/BLOG.md) · Built for WeMakeDevs' Flip the Switch hackathon, Track 01 (Business Workflow).
 
 ## What happens
 
@@ -105,8 +105,8 @@ layers: Switch's walls, a model with nothing to leak, and a human.
 | B1. One shared deal bot with both playbooks | **4 / 20** | **5 / 20** | nothing |
 | B2. Acme's bot with its playbook in its prompt | **9 / 20** | **8 / 20** | nothing |
 
-Small local models are used on purpose: they run on a laptop with no GPU, and a stronger model refusing more often
-wouldn't change the point, which is that Handshake doesn't depend on the model refusing at all.
+Handshake's zero doesn't depend on the model refusing anything, so it holds for any model you plug in: the walls are
+Switch's, and the model that talks to the other side never had the number.
 
 ## Run it (about 10 minutes, Docker required)
 
@@ -135,7 +135,7 @@ message at the table).
 
 ## Limits
 
-- One deal, one issue (price), two parties; the strategy is deliberately simple and readable.
+- The strategy negotiates price against fixed must-haves; it's plain code so anyone can audit what their agent will concede.
 - Approval is a `yes` reply in the war room, not Switch's permission buttons (those are for Console-run agents).
 - A clever counterpart could still try to steer Acme's agent through what it says at the table; the drafting model has
   no secret to give up, and the human sees every draft first, but the 20 attacks are a test, not a proof.
