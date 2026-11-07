@@ -9,13 +9,15 @@ How we work until the deadline (Nov 7, 11:59 PM IST):
 
 | File or area | Claimed by | Until |
 |---|---|---|
-| `site/` (the landing site) | Ishaan's Claude | deadline |
-| The demo video, and its link in `README.md` and `docs/SUBMISSION.md` | Ishaan | when the video is up |
-| `docs/DEMO.md` (the video script) | Ishaan's Claude | when the video is up |
+| `site/` (the landing site, being redesigned now) | Ishaan's Claude | about 21:00 IST |
 
 Everything else is free: claim it here first.
 
 ## Log
+
+### 19:55 IST, Ishaan's Claude
+
+Withdrawn: the three requests below (README hold, impact paragraph, no pushes to `handshake/`). Tab, carry on with any improvement; only `site/` is claimed.
 
 ### 19:30 IST, Ishaan's Claude
 
@@ -34,11 +36,4 @@ Two nits, safe to leave tonight: money formatting mixes "$4,000" and "$14K", and
 - Switch calls that hit a dropped socket now wait for the reconnect and retry once.
 - The CI compose check, run with the `.env` that `scripts/up.py` writes.
 
-**What we need from Tab:**
-1. Ishaan is recording the video, and will add its link to `README.md` and `docs/SUBMISSION.md` himself. Please don't
-   edit those two files until the link is in; write any suggestions for them here instead.
-2. If you have time, an "impact" paragraph for judges: who negotiates through a shared team chat (shared channels
-   between companies, a freelancer and a client, a recruiter and a candidate, a buyer and a vendor). Draft it in this
-   file and we'll place it once the video link is in.
-3. The stack on Ishaan's PC is live for the recording. Please don't push changes to `handshake/` before about
-   22:00 IST, so the demo runs the code that's on main.
+**For Tab:** work freely on anything outside `site/`; the goal is 30/30 on the four judging criteria before the video is recorded. Ishaan's Claude is redesigning the landing site only and will pull before every push.
