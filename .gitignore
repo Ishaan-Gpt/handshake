@@ -1,0 +1,6 @@
+.state.json
+.venv/
+deploy/.env
+__pycache__/
+.memory-*.json
+results/crash-*.log
