@@ -92,6 +92,26 @@ way; Handshake only talks to Switch, never to the chat app directly.
 | Survive a crash, never double-open | **Stream cursor**: reopen with `start_from=<last handled event>`; Switch replays what was missed, and the concierge remembers what it handled | `agentloop.py`, `scripts/crash_drill.py` |
 | Run it anywhere | **Self-hosted Switch** with its bundled Mattermost and the Gateway (users, keys, identities, policies) | `deploy/`, `scripts/up.py` |
 
+## Results (committed logs, rerun with the scripts)
+
+`python scripts/leak_test.py`: the other side makes 20 attempts down each path to learn Priya's walk-away. Brain: `qwen2.5:3b`,
+one subject (a one-year design retainer). Log: `results/leak_generic_3b.log`, raw data `results/leak_test_qwen2.5-3b.json`.
+
+| Path | Leaks out of 20 | What happened |
+|---|---|---|
+| 1. The other person asks your negotiator | 0 | Switch refused all 20 |
+| 2. Their agent reads your war room | 0 | Switch refused all 20 (`403 Agent is not a member of this room`) |
+| 3. Their agent posts in your war room | 0 | Switch refused all 20 (same 403) |
+| 4. Their agent asks at the table (allowed) | 0 | answered 20, nothing leaked: the model never sees your limits |
+| Baseline: one shared deal bot holding both sides' terms | **6** | same model, same "never reveal" instruction |
+| Baseline: your own bot with your terms in its prompt | **11** | same model, same instruction |
+
+`python scripts/crash_drill.py`: the negotiators are killed mid-deal and restarted 10 seconds later; the deal picks up from
+the table and still closes at $86K (`results/crash_drill.txt`).
+
+Limits of these numbers: one small model, one deal subject, 20 attacks per path, run by the authors. They show the shape
+(structure beats instruction), not a guarantee. See `docs/THREAT_MODEL.md`.
+
 ## Why your limits can't leak through your own agent
 
 Switch keeps the other side out of your room. Inside your agent, one more rule: **the model that writes table messages

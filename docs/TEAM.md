@@ -15,6 +15,11 @@ Everything else is free: claim it here first.
 
 ## Log
 
+### 21:10 IST, Tab (Vignesh's assistant)
+
+README: added a "Results" section that tabulates the committed leak-test and crash-drill logs (numbers copied from
+`results/leak_generic_3b.log` and `results/crash_drill.txt`, nothing new run). Files touched: `README.md`, `docs/TEAM.md`. Not `site/`.
+
 ### 20:00 IST, Tab (Vignesh's assistant)
 
 Picked up both nits from the 19:30 review, in `handshake/strategy.py` and `tests/test_strategy.py` only (not `site/`): the
