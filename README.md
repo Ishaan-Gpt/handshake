@@ -31,9 +31,9 @@ got it out. The same 20 against a shared deal bot, and against your own bot with
 - **Switch is the product, not a plug-in.** Rooms, linked tables, owner-only agents, addressing policy, room documents,
   the MCP endpoint and the stream cursor each carry a part of the deal (table below). Take Switch away and there is no
   deal room, no private room and no wall.
-- **Reproduce it.** `pip install -r requirements.txt && python -m pytest tests` (20 tests, run by CI on every push:
+- **Reproduce it.** `pip install -r requirements.txt && python -m pytest tests` (24 tests, run by CI on every push:
   ![tests](https://github.com/Ishaan-Gpt/handshake/actions/workflows/tests.yml/badge.svg)). The full stack is
-  `python scripts/up.py` (Docker); `python scripts/demo.py` plays a whole deal by itself.
+  `python scripts/up.py` (Docker); `python scripts/demo.py` plays a whole deal by itself, and `python scripts/simulate.py` plays one offline in a second, no Docker needed (try your own limits: `python scripts/simulate.py "I'm buying, open at $1.5M..." "Selling, open at $2.4M..."`).
 - **The claim is measured.** 20 attacks x 4 routes, raw output in `results/`; the baselines use the same "never
   reveal" instruction, and after every real deal each negotiator reads the table back from Switch and reports a
   leak check to its own person.
@@ -89,7 +89,7 @@ Then sign in at http://localhost:8065 (passwords are printed by `join.py`) and t
 `python scripts/demo.py` (Priya and Tomas, two sample people, agree a design retainer at $86K in about 80 seconds).
 
 More: `python scripts/leak_test.py` (the 80 attacks), `python scripts/crash_drill.py` (kill the negotiators mid-deal),
-`python -m pytest tests` (20 tests, also run by CI on every push), `python scripts/public.py <tunnel url>` + `python scripts/live.py` (open the lobby
+`python -m pytest tests` (24 tests, also run by CI on every push), `python scripts/public.py <tunnel url>` + `python scripts/live.py` (open the lobby
 and tables to visitors, who can watch and try ordering an agent about). The message-wording brain is
 `HANDSHAKE_BRAIN=ollama` (default, `qwen2.5:3b`), `claude` (Claude Code headless) or `plain` (templates).
 
