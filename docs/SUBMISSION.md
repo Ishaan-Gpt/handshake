@@ -27,7 +27,7 @@ agent protocol, which resumes from Switch's stream cursor after a crash.
 Measured: 20 attacks on a walk-away price through four routes leaked it 0 times in 80 through Handshake, while a shared
 deal bot leaked it 6 times in 20 and a single bot with the limits in its prompt 11 times in 20. Killed mid-deal, the
 negotiators came back and closed the deal. `python scripts/up.py` brings up self-hosted Switch 0.31.0 with Mattermost;
-the repo ships the demo, the leak test, the crash drill and 11 tests.
+the repo ships the demo, the leak test, the crash drill, a leak check read back from Switch after every deal, and 20 tests run by CI.
 
 ## How Switch is used (short list)
 Room-creating concierge agent (create_room on the Mattermost bridge, link_rooms, room groups, room instructions) ·

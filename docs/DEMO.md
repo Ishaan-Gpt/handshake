@@ -1,6 +1,6 @@
 # Demo video (2:30): what's on screen, and what you say
 
-**Before recording:** the stack is up, `python -m handshake.concierge` and `python -m handshake.negotiator` are running.
+**Before recording:** the stack is up, `python -m handshake` is running.
 Open two browser windows on http://localhost:8065: left signed in as **priya**, right (incognito) as **tomas**; passwords
 are in `.state.json` under `seats`. Both start in `#handshake-lobby`.
 

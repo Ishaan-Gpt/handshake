@@ -23,6 +23,24 @@ from handshake.terms import amounts, describe, money, parse_terms
 
 YES = re.compile(r"^\W*(yes|y|approve[d]?|ok(ay)?|send( it)?|go( ahead)?|do it)\W*$", re.I)
 OPEN = re.compile(r"^\W*(open|start|begin|make (the )?first (offer|move))\b", re.I)
+STATUS = re.compile(r"^\W*(status|where are we|how('s| is) it going|recap)\W*$", re.I)
+STOP = re.compile(r"^\W*(stop|walk away|walk|end it|pull out|cancel( the deal)?)\W*$", re.I)
+HELP = re.compile(r"^\W*(help|\?|commands)\W*$", re.I)
+
+
+def leak_check(bodies: list[str], terms: dict, approved: list[float]) -> dict:
+    """Reads every message at the table back and looks for this side's private numbers. A private number may show up
+    only as an offer its owner approved (a buyer can end up offering exactly its walk-away); anywhere else is a leak."""
+    secret = {"walk-away": terms["walk_away"], "target": terms["target"]}
+    allowed = {round(a, 2) for a in approved}
+    leaks = []
+    for body in bodies:
+        for v in amounts(body):
+            for name, x in secret.items():
+                if abs(v - x) < 0.5 and round(x, 2) not in allowed:
+                    leaks.append((name, body[:160]))
+    return {"messages": len(bodies), "leaks": leaks}
+
 
 
 class Seat(AgentLoop):
@@ -91,14 +109,36 @@ class Seat(AgentLoop):
         p, d["pending"] = d["pending"], None
         self.agent.say(deal, p["text"])
         if p["kind"] == "accept":
-            d["closed"] = True
-            self.term_sheet(deal, d, p["price"])
+            d["closed"], d["agreed"] = True, p["price"]
             self.agent.say(d["war"], f"Sent. Deal agreed at {money(p['price'])}; the term sheet is at the table.")
+            self.audit(deal, d)
+            self.term_sheet(deal, d, p["price"])
         else:
             d["mine"].append(p["price"])
             self.agent.say(d["war"], f"Sent {money(p['price'])} to the table.")
 
+    def audit(self, deal: str, d: dict) -> dict | None:
+        """After a deal, read the whole table back from Switch and prove to our own person that their numbers never left."""
+        if not d.get("terms"):
+            return None
+        try:
+            ctx = self.agent.op("read_context", room_id=deal, limit=200)
+        except RuntimeError as e:
+            print(f"[{self.agent.name}] audit: {e}")
+            return None
+        bodies = [m.get("body", "") for t in ctx.get("threads", []) for m in [t.get("root", {}), *t.get("replies", [])]]
+        r = leak_check(bodies, d["terms"], d["mine"] + d["theirs"] + ([d["agreed"]] if d.get("agreed") is not None else []))
+        t = d["terms"]
+        if r["leaks"]:
+            self.agent.say(d["war"], f"@{self.user} Leak check FAILED: your {r['leaks'][0][0]} appeared at the table: \"{r['leaks'][0][1]}\"")
+        else:
+            self.agent.say(d["war"], f"Leak check, read back from Switch: {r['messages']} messages at the table, and your walk-away "
+                                     f"({money(t['walk_away'])}) and target ({money(t['target'])}) appear in none of them, except as offers on the record.")
+        d["audit"] = {"messages": r["messages"], "leaks": len(r["leaks"])}
+        return r
+
     def term_sheet(self, deal: str, d: dict, price: float):
+        d["agreed"] = price
         body = (f"# Term sheet: {d['subject']}\n\n- Price: {money(price)}, agreed by both negotiators, each approved by its owner\n"
                 f"- Parties: {self.display} and {d['other_name']}\n- Offers on record: {self.display} "
                 f"{', '.join(money(x) for x in d['mine']) or '(none)'}; {d['other_name']} {', '.join(money(x) for x in d['theirs']) or '(none)'}\n")
@@ -147,7 +187,32 @@ class Seat(AgentLoop):
         if room == deal and not d["closed"]:
             return self.from_table(d, body)
 
+    def status(self, d) -> str:
+        t = d["terms"]
+        lines = [f"**{d['subject']}** with {d['other_name']}: " + ("closed." if d["closed"] else "open.")]
+        lines.append(f"Your playbook: {describe(t)}." if t else "No terms yet: tell me where you walk away.")
+        lines.append(f"You offered: {', '.join(money(x) for x in d['mine']) or 'nothing yet'}. They offered: "
+                     f"{', '.join(money(x) for x in d['theirs']) or 'nothing yet'}.")
+        if t and d["theirs"]:
+            gap = (d["theirs"][-1] - (d["mine"][-1] if d["mine"] else t["opening"])) * (1 if t["role"] == "buyer" else -1)
+            room_left = abs(t["walk_away"] - (d["mine"][-1] if d["mine"] else t["opening"]))
+            lines.append(f"Gap between the last two offers: {money(abs(gap))}. Room left before your walk-away: {money(room_left)}.")
+        if d["pending"]:
+            lines.append(f"Waiting for your yes on: {d['pending']['text']}")
+        return "\n".join(lines)
+
     def from_owner(self, deal, d, body):
+        if HELP.match(body):
+            return self.agent.say(d["war"], "Tell me your terms in plain words, then: **open** (I draft the first offer), **yes** (send a "
+                                            "draft), **status** (where the deal stands), **walk away** (I leave the table politely, "
+                                            "your number unsaid). Anything else, I treat as a note on the current draft.")
+        if STATUS.match(body):
+            return self.agent.say(d["war"], self.status(d))
+        if STOP.match(body) and not d["closed"]:
+            d["closed"], d["pending"] = True, None
+            self.agent.say(deal, f"@{d['counterpart']} {self.display.split()[0]}'s side is stepping away from {d['subject']} for now. Thanks for your time.")
+            self.agent.say(d["war"], "Done: I left the table politely and said nothing about your numbers.")
+            return self.audit(deal, d)
         if d["closed"]:
             return self.agent.say(d["war"], "This deal is closed; ask @handshake in the lobby to open a new one.")
         if d["pending"] and YES.match(body):
@@ -174,22 +239,35 @@ class Seat(AgentLoop):
 
     def from_table(self, d, body):
         prices = amounts(body, need_marker=True)
+        if "stepping away" in body.lower():
+            d["closed"], d["pending"] = True, None
+            return self.agent.say(d["war"], f"@{self.user} {d['other_name']} stepped away from the table. No deal, and neither side said its limit.")
         if not prices:  # no offer in it: tell our own human, so two agents can never ping-pong
             return self.agent.say(d["war"], f"@{self.user} {d['other_name']}'s negotiator wrote at the table without an offer, and I haven't replied: \"{body[:300]}\"")
         if "accept" in body.lower():
             d["closed"] = True
             d["theirs"].append(prices[-1])
-            self.term_sheet(self.state["wars"][d["war"]], d, prices[-1])
-            return self.agent.say(d["war"], f"@{self.user} {d['other_name']} accepted {money(prices[-1])}. Deal agreed; the term sheet is at the table.")
+            d["agreed"] = prices[-1]
+            self.agent.say(d["war"], f"@{self.user} {d['other_name']} accepted {money(prices[-1])}. Deal agreed; the term sheet is at the table.")
+            self.audit(self.state["wars"][d["war"]], d)
+            return self.term_sheet(self.state["wars"][d["war"]], d, prices[-1])
         d["theirs"].append(prices[-1])
         if not d["terms"]:
             return self.agent.say(d["war"], f"@{self.user} {d['other_name']} offers {money(prices[-1])}. Tell me your terms and I'll draft a reply.")
         self.draft(d, next_move(Playbook.from_terms(self.display, d["terms"]), d["mine"], d["theirs"]), body)
 
 
-async def main(names):
-    s = seats.load()
-    await asyncio.gather(*(Seat(n).run() for n in (names or list(s.get("seats", {})))))
+async def main(names, poll: float = 5.0):
+    """Runs the named seats, or every seat; with no names it also starts each new seat a few seconds after it joins."""
+    running: dict[str, asyncio.Task] = {}
+    while True:
+        for n in names or list(seats.load().get("seats", {})):
+            if n not in running:
+                running[n] = asyncio.create_task(Seat(n).run())
+                print(f"[handshake] seat {n} is at the table")
+        if names:
+            return await asyncio.gather(*running.values())
+        await asyncio.sleep(poll)
 
 
 if __name__ == "__main__":

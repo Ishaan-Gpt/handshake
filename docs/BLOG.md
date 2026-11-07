@@ -103,7 +103,7 @@ every agent remembers the messages it has handled. And `2.10M - 0.15M` is `1.950
 ```bash
 git clone https://github.com/Ishaan-Gpt/handshake && cd handshake
 python scripts/up.py && python scripts/join.py you "You" && python scripts/join.py them "Them"
-python -m handshake.concierge & python -m handshake.negotiator
+python -m handshake
 ```
 
 Then type `@handshake open a deal with @them about whatever you're agreeing` in `#handshake-lobby`. What I keep coming

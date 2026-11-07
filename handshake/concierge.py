@@ -16,6 +16,8 @@ from handshake.agentloop import AgentLoop
 from handshake.switch_api import Agent
 
 OPEN = re.compile(r"open (?:a )?deal with @?([a-z0-9._-]+)(?: about (.+))?", re.I)
+DEALS = re.compile(r"\b(deals|my deals|status|list)\b", re.I)
+WHO = re.compile(r"\b(who|seats|people)\b", re.I)
 
 
 def slug(text: str) -> str:
@@ -53,8 +55,18 @@ class Concierge(AgentLoop):
         s = seats.load()
         me = p.get("sender_name", "")
         m = OPEN.search(p.get("body", ""))
+        if not m and DEALS.search(p.get("body", "")):
+            mine = [(k, f) for k, f in s.get("deals", {}).items() if me in f["parties"]]
+            if not mine:
+                return self.agent.say(room, f"@{me} You have no deals yet. Open one: **@handshake open a deal with @name about something**.")
+            lines = [f"- **{f['subject']}** with " + ", ".join(v["name"] for u, v in f["parties"].items() if u != me) for k, f in mine[-8:]]
+            return self.agent.say(room, f"@{me} Your deals ({len(mine)}), newest last; each has a table and your private room:\n" + "\n".join(lines))
+        if not m and WHO.search(p.get("body", "")):
+            people = ", ".join(f"@{u} ({v['name']})" for u, v in s.get("seats", {}).items())
+            return self.agent.say(room, f"@{me} People with a seat here: {people}.")
         if not m:
-            return self.agent.say(room, f"@{me} Ask me like this: **@handshake open a deal with @name about what you're agreeing**.")
+            return self.agent.say(room, f"@{me} Ask me like this: **@handshake open a deal with @name about what you're agreeing**. "
+                                        f"I also answer **deals** (your deals) and **who** (people with a seat).")
         other, subject = m.group(1).lower(), (m.group(2) or "a deal").strip().rstrip(".")
         if me not in s.get("seats", {}):
             return self.agent.say(room, f"@{me} You need a seat first (python scripts/join.py {me} \"Your Name\").")

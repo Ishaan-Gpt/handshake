@@ -1,6 +1,8 @@
 """The small slice of Switch's HTTP API that Handshake uses: Gateway sign-in, users, keys, agent registration,
 identity links, and agent operations. Everything here is a documented endpoint that Switch's own setup and Console use.
 """
+import time
+
 import httpx
 
 SWITCH = "http://localhost:8000"
@@ -35,6 +37,15 @@ class Agent:
     def op(self, _op: str, **args):
         headers = {"X-Switch-Connection-Id": self.connection_id} if self.connection_id else {}
         r = self.http.post(f"/agents/{self.id}/ops/{_op}", json=args, headers=headers)
+        if r.status_code == 409 and "not open" in r.text and self.connection_id:
+            # Switch dropped our socket mid-call; the agent loop reconnects on its own, so wait for the new
+            # connection and try once more instead of losing the operation.
+            old = self.connection_id
+            for _ in range(40):
+                time.sleep(0.5)
+                if self.connection_id != old:
+                    break
+            r = self.http.post(f"/agents/{self.id}/ops/{_op}", json=args, headers={"X-Switch-Connection-Id": self.connection_id})
         if r.status_code >= 400:
             raise RuntimeError(f"{self.name} {_op} -> {r.status_code} {r.text[:400]}")
         return r.json().get("result")

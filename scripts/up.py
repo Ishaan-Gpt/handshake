@@ -55,8 +55,7 @@ def main():
     from handshake import seats
     seats.ensure_concierge()
     print("\nReady. Next:\n  python scripts/join.py you \"Your Name\"     (and one for the other side)\n"
-          "  python -m handshake.concierge               (terminal 2: opens deals from #handshake-lobby)\n"
-          "  python -m handshake.negotiator              (terminal 3: every seat's negotiator)\n"
+          "  python -m handshake                          (terminal 2: the concierge and every seat's negotiator)\n"
           "Then sign in at http://localhost:8065 and type in #handshake-lobby:\n"
           "  @handshake open a deal with @them about whatever you're agreeing\n"
           "Or watch a whole deal play out: python scripts/demo.py")
