@@ -114,6 +114,8 @@ and tables to visitors, who can watch and try ordering an agent about). The mess
   events go to a worker, pings are answered at once.
 - **Money isn't a float.** `2.10M - 0.15M` is `1.9500000000000002M`; amounts are rounded before they're compared.
 
+**Threat model:** [docs/THREAT_MODEL.md](docs/THREAT_MODEL.md) lists each attack route, what stops it, and what Handshake does not protect.
+
 ## Limits
 
 - One negotiated number per deal (price, fee or rate) against stated must-haves; the strategy is plain code so anyone
