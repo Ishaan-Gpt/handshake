@@ -4,3 +4,6 @@ deploy/.env
 __pycache__/
 .memory-*.json
 results/crash-*.log
+.state.old.json
+.memory-*.old
+scripts/*.bak

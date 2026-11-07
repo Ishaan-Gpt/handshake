@@ -202,3 +202,33 @@ html[data-intro="lamps"] .intro { display: grid; }
   .stage__cap { position: static; display: block; margin-top: 8px; font-size: 10px; }
   .hero { gap: 34px; }
 }
+
+/* How it works: three steps beside a stage that builds the rooms. */
+.how { position: relative; height: 330svh; }
+.how__pin { position: sticky; top: 0; height: 100svh; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(24px, 4vw, 64px);
+  align-items: center; padding: calc(90 * var(--u)) clamp(16px, 4vw, 48px) calc(30 * var(--u)); overflow: clip; }
+.how__steps { position: relative; min-height: 56svh; }
+.step { position: absolute; inset: 0; display: grid; align-content: center; opacity: 0; transform: translateY(18px); filter: blur(6px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease), filter .7s var(--ease); pointer-events: none; }
+.step.on { opacity: 1; transform: none; filter: none; pointer-events: auto; }
+.step__n { margin: 0 0 14px; font: 400 12px var(--mono); color: var(--cel-400); }
+.step__n::before { content: "step "; }
+.bubble { margin: 26px 0 0; max-width: 46ch; padding: 12px 14px; border-radius: 2px; background: var(--ink-900); border: 1px solid var(--ink-800); font: 400 13px/1.6 var(--mono); color: var(--cel-100); }
+.bubble b { display: block; font: 600 11px var(--sans); color: var(--cel-300); margin-bottom: 2px; }
+.bubble--wax { border-color: var(--wax-700); }
+.bubble--wax b { color: var(--wax-300); }
+@media (max-width: 900px) { .how__pin { grid-template-columns: 1fr; align-content: start; padding-top: 76px; } .stage--how { order: -1; } .how__steps { min-height: 44svh; } }
+
+/* Start: numbered steps with commands. */
+.start { list-style: none; padding: 0; margin: calc(56 * var(--u)) 0 0; display: grid; gap: 0; }
+.start li { display: grid; grid-template-columns: 56px 1fr; gap: 18px; padding: 26px 0; border-top: 1px solid var(--ink-800); }
+.start li > span { font: 300 44px/1 var(--serif); color: var(--cel-400); font-style: italic; }
+.start h3 { margin: 0; font: 400 26px var(--serif); color: var(--cel-50); }
+.start p { margin: 6px 0 14px; font-size: 15px; color: var(--cel-200); opacity: .85; }
+.live { margin-top: 34px; display: grid; grid-template-columns: 34px 1fr auto; gap: 16px; align-items: center; padding: 20px 22px; background: var(--ink-900); border: 1px solid var(--ink-800); border-radius: 2px; }
+.live svg { width: 30px; height: 30px; color: var(--cel-300); }
+.live p { margin: 0; font-size: 15px; color: var(--cel-200); }
+.live code { font-size: 12.5px; color: var(--cel-100); }
+@media (max-width: 760px) { .live { grid-template-columns: 1fr; } }
+.agents .ways { margin-top: calc(48 * var(--u)); }
+@media (max-width: 900px) { .how__steps { margin-top: 18px; } .step { align-content: start; } }

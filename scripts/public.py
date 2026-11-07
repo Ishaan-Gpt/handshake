@@ -5,7 +5,7 @@
 
 Only Mattermost goes public; the Switch API, the Gateway and the database stay on localhost. It tells Mattermost its
 public address, turns off open sign-up, and makes one shared visitor account that can sit in the deal room (never the
-war rooms). A visitor can watch the agents bargain and try ordering one about: Switch refuses them, because a visitor
+private rooms). A visitor can watch the agents bargain and try ordering one about: Switch refuses them, because a visitor
 is nobody's owner. scripts/live.py then runs a fresh deal every few minutes so there's always something happening.
 """
 import subprocess
@@ -15,7 +15,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 from handshake.switch_api import mattermost  # noqa: E402
-from scripts.bootstrap import ENV  # noqa: E402
+from handshake.seats import env  # noqa: E402
+ENV = env()
 
 VISITOR, VISITOR_PASSWORD = "visitor", "try-to-break-it"  # public on purpose: it's printed on the site
 

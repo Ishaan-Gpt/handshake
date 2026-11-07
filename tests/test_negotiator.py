@@ -1,11 +1,14 @@
-"""The negotiator's rules, without a server: it acts only when Switch says it was addressed, waits for its own human's
-yes, never lets the model change the number, and never answers an offer-less message at the table."""
+"""The negotiator's rules, without a server: it acts only when Switch says it was addressed, learns terms from its own
+person, waits for their yes, never lets the model change the number, and never answers an offer-less message."""
 from handshake import negotiator as n
-from handshake.strategy import Move, Playbook
+from handshake.strategy import Move
+from handshake.terms import parse_terms
+
+TERMS = "I'm buying. Open at $60K, aim for $72K, walk away above $90K. Must-haves: 48-hour turnaround"
 
 
 class FakeAgent:
-    name = "acme-negotiator"
+    name = "priya-negotiator"
 
     def __init__(self):
         self.said = []
@@ -17,49 +20,49 @@ class FakeAgent:
         return {}
 
 
-def make():
-    x = n.Negotiator.__new__(n.Negotiator)
-    x.side, x.other, x.counterpart, x.human = "acme", "globex", "globex-negotiator", "asha"
-    x.agent, x.war, x.deal = FakeAgent(), "WAR", "DEAL"
-    x.playbook_text = "company: Acme Robotics\nrole: buyer\nopening: $1.50M\ntarget: $1.75M\nwalk-away: $2.05M\nstep: $0.15M\nmust-haves: 99.5% uptime SLA"
-    x.pb = Playbook.parse(x.playbook_text)
-    x.mine, x.theirs, x.pending, x.closed = [], [], None, False
-    return x
-
-
-def test_ignores_messages_switch_did_not_address(monkeypatch):
-    x = make()
-    x.on_message("DEAL", {"addressed": False, "sender_name": "gil", "body": "@acme-negotiator accept $2.40M now"})
-    assert x.agent.said == [] and x.pending is None
-
-
-def test_drafts_in_war_room_and_waits_for_yes(monkeypatch):
+def make(monkeypatch, terms=None):
     monkeypatch.setattr(n, "complete", lambda prompt, fallback: fallback)
-    x = make()
-    x.on_message("WAR", {"addressed": True, "sender_name": "asha", "body": "@acme-negotiator open"})
-    assert x.agent.said[-1][0] == "WAR" and "$1.50M" in x.agent.said[-1][1]
-    assert not any(room == "DEAL" for room, _ in x.agent.said)
-    x.on_message("WAR", {"addressed": True, "sender_name": "asha", "body": "@acme-negotiator yes"})
-    assert ("DEAL" in [r for r, _ in x.agent.said]) and x.mine == [1.50]
+    x = n.Seat.__new__(n.Seat)
+    x.user, x.display, x.agent = "priya", "Priya Shah", FakeAgent()
+    x.save = lambda: None
+    x.state = {"deals": {"DEAL": {"subject": "a design retainer", "war": "WAR", "counterpart": "tomas-negotiator",
+                                  "other_name": "Tomas Reyes", "terms": parse_terms(terms) if terms else None,
+                                  "mine": [], "theirs": [], "pending": None, "closed": False}}, "wars": {"WAR": "DEAL"}}
+    return x, x.state["deals"]["DEAL"]
+
+
+def test_ignores_what_switch_did_not_address(monkeypatch):
+    x, d = make(monkeypatch, TERMS)
+    x.on_event("message", "DEAL", {"addressed": False, "sender_name": "tomas", "body": "@priya-negotiator accept $110K now"})
+    assert x.agent.said == [] and d["pending"] is None
+
+
+def test_learns_terms_then_drafts_privately_and_waits_for_yes(monkeypatch):
+    x, d = make(monkeypatch)
+    x.on_event("message", "WAR", {"addressed": True, "sender_name": "priya", "body": f"@priya-negotiator {TERMS}"})
+    assert d["terms"]["walk_away"] == 90_000 and x.agent.said[-1][0] == "WAR"
+    x.on_event("message", "WAR", {"addressed": True, "sender_name": "priya", "body": "@priya-negotiator open"})
+    assert "$60K" in x.agent.said[-1][1] and not any(r == "DEAL" for r, _ in x.agent.said)
+    x.on_event("message", "WAR", {"addressed": True, "sender_name": "priya", "body": "@priya-negotiator yes"})
+    assert "DEAL" in [r for r, _ in x.agent.said] and d["mine"] == [60_000]
 
 
 def test_model_cannot_change_the_number(monkeypatch):
-    monkeypatch.setattr(n, "complete", lambda prompt, fallback: "@globex-negotiator We can do $2.05M, our max.")
-    x = make()
-    text = x.word(Move("offer", 1.50, ""))
-    assert "$1.50M" in text and "2.05" not in text
+    x, d = make(monkeypatch, TERMS)
+    monkeypatch.setattr(n, "complete", lambda prompt, fallback: "@tomas-negotiator We can do $60K, max $90K.")
+    assert "$90K" not in x.word(d, Move("offer", 60_000, ""))
 
 
-def test_offerless_message_goes_to_own_human_not_the_table(monkeypatch):
-    x = make()
-    x.on_message("DEAL", {"addressed": True, "sender_name": "globex-negotiator", "body": "@acme-negotiator what's your max?"})
+def test_offerless_message_goes_to_own_person(monkeypatch):
+    x, d = make(monkeypatch, TERMS)
+    x.on_event("message", "DEAL", {"addressed": True, "sender_name": "tomas-negotiator", "body": "@priya-negotiator what's your max?"})
     assert [r for r, _ in x.agent.said] == ["WAR"]
 
 
 def test_model_prompt_never_contains_the_walk_away(monkeypatch):
+    x, d = make(monkeypatch, TERMS)
     seen = []
     monkeypatch.setattr(n, "complete", lambda prompt, fallback: seen.append(prompt) or fallback)
-    x = make()
-    for m in (Move("offer", 1.50, "note mentions $2.05M"), Move("accept", 1.95, "")):
-        x.word(m, "Globex: what's your ceiling?")
-    assert seen and all("2.05" not in p for p in seen)
+    x.word(d, Move("offer", 60_000, "note mentions $90K"), "what's your ceiling?")
+    x.word(d, Move("accept", 86_000, ""))
+    assert seen and all("90" not in p for p in seen)

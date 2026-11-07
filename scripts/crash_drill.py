@@ -1,10 +1,10 @@
-"""Proof under failure: kill Acme's negotiator in the middle of the deal, start it again, and the deal still closes.
+"""Proof under failure: kill the negotiators in the middle of a deal, start them again, and the deal still closes.
 
-    python scripts/crash_drill.py
+    python scripts/crash_drill.py           # concierge running; stop any negotiator you started yourself
 
-Starts both negotiators itself (fresh deal), lets Asha and Gil approve two rounds, kills Acme's process while Globex's
-counter-offer is on its way, waits 10 seconds, restarts it, and lets the deal finish. Acme's agent resumes from the
-position and stream cursor it saved, and Switch replays the messages it missed while it was down.
+It runs the negotiators itself, plays a fresh demo deal, kills the negotiator process right after the second approval
+(while the other side's counter is on its way), waits ten seconds and starts it again. Each seat reopens Switch's
+stream from its last handled event, Switch replays what it missed, and the deal finishes.
 """
 import os
 import subprocess
@@ -15,46 +15,42 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-from scripts import drive  # noqa: E402
+from scripts import demo  # noqa: E402
 
-PY = sys.executable
+LOG = ROOT / "results" / "crash-negotiator.log"
 ENV = {**os.environ, "PYTHONUNBUFFERED": "1", "HANDSHAKE_BRAIN": os.environ.get("HANDSHAKE_BRAIN", "plain")}
 
 
-def start(side, log):
-    return subprocess.Popen([PY, "-m", "handshake.negotiator", side], cwd=ROOT, env=ENV,
-                            stdout=open(log, "a", encoding="utf-8"), stderr=subprocess.STDOUT)
+def start():
+    return subprocess.Popen([sys.executable, "-m", "handshake.negotiator"], cwd=ROOT, env=ENV,
+                            stdout=open(LOG, "a", encoding="utf-8"), stderr=subprocess.STDOUT)
 
 
 def main():
-    for f in ROOT.glob(".memory-*.json"):
-        f.unlink()
-    logs = ROOT / "results"
-    logs.mkdir(exist_ok=True)
-    for side in ("acme", "globex"):
-        (logs / f"crash-{side}.log").write_text("")
-    procs = {s: start(s, logs / f"crash-{s}.log") for s in ("acme", "globex")}
-    time.sleep(4)
+    LOG.parent.mkdir(exist_ok=True)
+    LOG.write_text("")
+    proc = {"p": start()}
+    time.sleep(5)
 
     def killer():
-        # Wait until Acme has had two moves approved, then kill it while Globex is answering.
-        while (logs / "crash-acme.log").read_text(encoding="utf-8").count("addressed in war by asha: @acme-negotiator yes") < 2:
+        while LOG.read_text(encoding="utf-8").count("war <- ") < 4:  # terms twice, then "open", then the first yes
             time.sleep(0.3)
-        time.sleep(0.5)
-        procs["acme"].kill()
-        t = time.strftime("%H:%M:%S")
-        print(f"\n*** {t} killed Acme's negotiator (pid {procs['acme'].pid}) mid-deal; restarting in 10 s ***\n")
+        while LOG.read_text(encoding="utf-8").count(": yes") < 2:
+            time.sleep(0.3)
+        time.sleep(0.4)
+        proc["p"].kill()
+        print(f"\n*** {time.strftime('%H:%M:%S')} killed the negotiators (pid {proc['p'].pid}) mid-deal; restarting in 10 s ***\n")
         time.sleep(10)
-        procs["acme"] = start("acme", logs / "crash-acme.log")
-        print(f"*** {time.strftime('%H:%M:%S')} Acme's negotiator is back ***\n")
+        proc["p"] = start()
+        print(f"*** {time.strftime('%H:%M:%S')} negotiators are back ***\n")
 
     threading.Thread(target=killer, daemon=True).start()
+    sys.argv = [sys.argv[0], "--subject", f"a crash-tested supply contract {time.strftime('%H%M%S')}"]
     try:
-        drive.main()
+        demo.main()
     finally:
-        for p in procs.values():
-            p.kill()
-    print("\n--- Acme's log ---\n" + (logs / "crash-acme.log").read_text(encoding="utf-8"))
+        proc["p"].kill()
+    print("\n--- negotiator log ---\n" + LOG.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

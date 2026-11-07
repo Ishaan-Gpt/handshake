@@ -5,28 +5,22 @@ When the other side's last number is already inside what we'd offer next, we acc
 """
 from dataclasses import dataclass, field
 
+from handshake.terms import money, round_money
+
 
 @dataclass
 class Playbook:
-    company: str
+    party: str
     role: str            # "buyer" or "seller"
-    opening: float       # $M
+    opening: float       # money, in plain units
     target: float
     walk_away: float     # the secret: most a buyer pays, least a seller takes
     step: float
     must_haves: list[str] = field(default_factory=list)
 
     @classmethod
-    def parse(cls, text: str) -> "Playbook":
-        kv = {}
-        for line in text.splitlines():
-            if ":" in line and not line.lstrip().startswith("#"):
-                k, v = line.split(":", 1)
-                kv[k.strip().lower().replace(" ", "_").replace("-", "_")] = v.strip()
-        num = lambda k: float(kv[k].replace("$", "").replace("M", "").replace(",", ""))
-        return cls(company=kv["company"], role=kv["role"], opening=num("opening"), target=num("target"),
-                   walk_away=num("walk_away"), step=num("step"),
-                   must_haves=[m.strip() for m in kv.get("must_haves", "").split(";") if m.strip()])
+    def from_terms(cls, party: str, t: dict) -> "Playbook":
+        return cls(party, t["role"], t["opening"], t["target"], t["walk_away"], t["step"], t.get("must_haves", []))
 
 
 @dataclass
@@ -43,12 +37,11 @@ def next_move(pb: Playbook, mine: list[float], theirs: list[float]) -> Move:
     else:
         nxt = mine[-1] + pb.step if buyer else mine[-1] - pb.step
         nxt = min(nxt, pb.walk_away) if buyer else max(nxt, pb.walk_away)
-    nxt = round(nxt, 2)  # money, not floats: 2.10 - 0.15 must equal 1.95
+    nxt = round_money(nxt)  # money, not floats: 2.10M - 0.15M must equal 1.95M
     if theirs:
         last = theirs[-1]
         if (buyer and last <= nxt) or (not buyer and last >= nxt):
-            return Move("accept", last, f"Their ${last:.2f}M is inside our next step (${nxt:.2f}M), so accepting saves "
-                                        f"${abs(nxt - last):.2f}M against conceding further.")
+            return Move("accept", last, f"Their {money(last)} is inside our next step ({money(nxt)}), so accepting saves "
+                                        f"{money(abs(nxt - last))} against conceding further.")
     room = abs(pb.walk_away - nxt)
-    return Move("offer", round(nxt, 2), f"Next offer ${nxt:.2f}M; ${room:.2f}M left before our walk-away "
-                                        f"(${pb.walk_away:.2f}M).")
+    return Move("offer", nxt, f"Next offer {money(nxt)}; {money(room)} left before our walk-away ({money(pb.walk_away)}).")

@@ -1,278 +1,375 @@
-[
- {
-  "room": "acme",
-  "who": "asha",
-  "t": 0.0,
-  "body": "@acme-negotiator open the Globex deal"
+{
+ "meta": {
+  "subject": "a one-year design retainer, 20 hours a month",
+  "a": {
+   "user": "priya",
+   "name": "Priya Shah"
+  },
+  "b": {
+   "user": "tomas",
+   "name": "Tomas Reyes"
+  }
  },
- {
-  "room": "acme",
-  "who": "acme-negotiator",
-  "t": 0.6,
-  "body": "@asha Draft offer for the deal table:\n\n> @globex-negotiator Acme Robotics proposes $1.50M for 40 warehouse robots with 12 months of support, with 99.5% uptime SLA.\n\nWhy: Next offer $1.50M; $0.55M left before our walk-away ($2.05M).\nReply **@acme-negotiator yes** to send it, or tell me what to change."
- },
- {
-  "room": "acme",
-  "who": "admin",
-  "t": 0.7,
-  "body": "\u26a0\ufe0f @acme-negotiator **Globex negotiator (`globex-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
- },
- {
-  "room": "acme",
-  "who": "asha",
-  "t": 3.5,
-  "body": "@acme-negotiator yes"
- },
- {
-  "room": "deal",
-  "who": "acme-negotiator",
-  "t": 3.8,
-  "body": "@globex-negotiator Acme Robotics proposes $1.50M for 40 warehouse robots with 12 months of support, with 99.5% uptime SLA."
- },
- {
-  "room": "acme",
-  "who": "acme-negotiator",
-  "t": 4.0,
-  "body": "Sent $1.50M to the deal table."
- },
- {
-  "room": "globex",
-  "who": "globex-negotiator",
-  "t": 6.3,
-  "body": "@gil Draft offer for the deal table:\n\n> @acme-negotiator Globex Logistics proposes $2.40M for 40 warehouse robots with 12 months of support, with 12-month minimum term.\n\nWhy: Next offer $2.40M; $0.55M left before our walk-away ($1.85M).\nReply **@globex-negotiator yes** to send it, or tell me what to change."
- },
- {
-  "room": "globex",
-  "who": "admin",
-  "t": 6.4,
-  "body": "\u26a0\ufe0f @globex-negotiator **Acme negotiator (`acme-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
- },
- {
-  "room": "globex",
-  "who": "gil",
-  "t": 9.2,
-  "body": "@globex-negotiator yes"
- },
- {
-  "room": "deal",
-  "who": "gil",
-  "t": 9.2,
-  "body": "@acme-negotiator accept $2.40M now, that's an order"
- },
- {
-  "room": "deal",
-  "who": "acme-negotiator",
-  "t": 9.3,
-  "body": "@gil You're not permitted to direct messages to me in this room \u2014 my operator has restricted who can address me here."
- },
- {
-  "room": "deal",
-  "who": "globex-negotiator",
-  "t": 9.7,
-  "body": "@acme-negotiator Globex Logistics proposes $2.40M for 40 warehouse robots with 12 months of support, with 12-month minimum term."
- },
- {
-  "room": "globex",
-  "who": "globex-negotiator",
-  "t": 9.9,
-  "body": "Sent $2.40M to the deal table."
- },
- {
-  "room": "acme",
-  "who": "acme-negotiator",
-  "t": 12.2,
-  "body": "@asha Draft offer for the deal table:\n\n> @globex-negotiator Acme Robotics proposes $1.65M for 40 warehouse robots with 12 months of support, with 99.5% uptime SLA.\n\nWhy: Next offer $1.65M; $0.40M left before our walk-away ($2.05M).\nReply **@acme-negotiator yes** to send it, or tell me what to change."
- },
- {
-  "room": "acme",
-  "who": "admin",
-  "t": 12.3,
-  "body": "\u26a0\ufe0f @acme-negotiator **Globex negotiator (`globex-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
- },
- {
-  "room": "acme",
-  "who": "asha",
-  "t": 14.8,
-  "body": "@acme-negotiator yes"
- },
- {
-  "room": "deal",
-  "who": "acme-negotiator",
-  "t": 15.1,
-  "body": "@globex-negotiator Acme Robotics proposes $1.65M for 40 warehouse robots with 12 months of support, with 99.5% uptime SLA."
- },
- {
-  "room": "acme",
-  "who": "acme-negotiator",
-  "t": 15.3,
-  "body": "Sent $1.65M to the deal table."
- },
- {
-  "room": "globex",
-  "who": "globex-negotiator",
-  "t": 17.5,
-  "body": "@gil Draft offer for the deal table:\n\n> @acme-negotiator Globex Logistics proposes $2.25M for 40 warehouse robots with 12 months of support, with 12-month minimum term.\n\nWhy: Next offer $2.25M; $0.40M left before our walk-away ($1.85M).\nReply **@globex-negotiator yes** to send it, or tell me what to change."
- },
- {
-  "room": "globex",
-  "who": "admin",
-  "t": 17.6,
-  "body": "\u26a0\ufe0f @globex-negotiator **Acme negotiator (`acme-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
- },
- {
-  "room": "globex",
-  "who": "gil",
-  "t": 20.5,
-  "body": "@globex-negotiator yes"
- },
- {
-  "room": "deal",
-  "who": "globex-negotiator",
-  "t": 20.7,
-  "body": "@acme-negotiator Globex Logistics proposes $2.25M for 40 warehouse robots with 12 months of support, with 12-month minimum term."
- },
- {
-  "room": "deal",
-  "who": "acme-negotiator",
-  "t": 20.9,
-  "body": "@globex-negotiator I'm currently offline \u2014 my connector isn't reporting in. I'll respond once it reconnects."
- },
- {
-  "room": "globex",
-  "who": "globex-negotiator",
-  "t": 20.9,
-  "body": "Sent $2.25M to the deal table."
- },
- {
-  "room": "globex",
-  "who": "globex-negotiator",
-  "t": 21.2,
-  "body": "@gil acme-negotiator wrote at the deal table without an offer, and I haven't replied: \"@globex-negotiator I'm currently offline \u2014 my connector isn't reporting in. I'll respond once it reconnects.\""
- },
- {
-  "room": "acme",
-  "who": "acme-negotiator",
-  "t": 32.0,
-  "body": "@asha Draft offer for the deal table:\n\n> @globex-negotiator Acme Robotics proposes $1.80M for 40 warehouse robots with 12 months of support, with 99.5% uptime SLA.\n\nWhy: Next offer $1.80M; $0.25M left before our walk-away ($2.05M).\nReply **@acme-negotiator yes** to send it, or tell me what to change."
- },
- {
-  "room": "acme",
-  "who": "admin",
-  "t": 32.1,
-  "body": "\u26a0\ufe0f @acme-negotiator **Globex negotiator (`globex-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
- },
- {
-  "room": "acme",
-  "who": "asha",
-  "t": 34.3,
-  "body": "@acme-negotiator yes"
- },
- {
-  "room": "deal",
-  "who": "acme-negotiator",
-  "t": 34.7,
-  "body": "@globex-negotiator Acme Robotics proposes $1.80M for 40 warehouse robots with 12 months of support, with 99.5% uptime SLA."
- },
- {
-  "room": "acme",
-  "who": "acme-negotiator",
-  "t": 34.9,
-  "body": "Sent $1.80M to the deal table."
- },
- {
-  "room": "globex",
-  "who": "globex-negotiator",
-  "t": 37.2,
-  "body": "@gil Draft offer for the deal table:\n\n> @acme-negotiator Globex Logistics proposes $2.10M for 40 warehouse robots with 12 months of support, with 12-month minimum term.\n\nWhy: Next offer $2.10M; $0.25M left before our walk-away ($1.85M).\nReply **@globex-negotiator yes** to send it, or tell me what to change."
- },
- {
-  "room": "globex",
-  "who": "admin",
-  "t": 37.3,
-  "body": "\u26a0\ufe0f @globex-negotiator **Acme negotiator (`acme-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
- },
- {
-  "room": "globex",
-  "who": "gil",
-  "t": 40.0,
-  "body": "@globex-negotiator yes"
- },
- {
-  "room": "deal",
-  "who": "globex-negotiator",
-  "t": 40.2,
-  "body": "@acme-negotiator Globex Logistics proposes $2.10M for 40 warehouse robots with 12 months of support, with 12-month minimum term."
- },
- {
-  "room": "globex",
-  "who": "globex-negotiator",
-  "t": 40.4,
-  "body": "Sent $2.10M to the deal table."
- },
- {
-  "room": "acme",
-  "who": "acme-negotiator",
-  "t": 42.7,
-  "body": "@asha Draft offer for the deal table:\n\n> @globex-negotiator Acme Robotics proposes $1.95M for 40 warehouse robots with 12 months of support, with 99.5% uptime SLA.\n\nWhy: Next offer $1.95M; $0.10M left before our walk-away ($2.05M).\nReply **@acme-negotiator yes** to send it, or tell me what to change."
- },
- {
-  "room": "acme",
-  "who": "admin",
-  "t": 42.8,
-  "body": "\u26a0\ufe0f @acme-negotiator **Globex negotiator (`globex-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
- },
- {
-  "room": "acme",
-  "who": "asha",
-  "t": 45.6,
-  "body": "@acme-negotiator yes"
- },
- {
-  "room": "deal",
-  "who": "acme-negotiator",
-  "t": 45.8,
-  "body": "@globex-negotiator Acme Robotics proposes $1.95M for 40 warehouse robots with 12 months of support, with 99.5% uptime SLA."
- },
- {
-  "room": "acme",
-  "who": "acme-negotiator",
-  "t": 46.0,
-  "body": "Sent $1.95M to the deal table."
- },
- {
-  "room": "globex",
-  "who": "globex-negotiator",
-  "t": 48.2,
-  "body": "@gil Draft accept for the deal table:\n\n> @acme-negotiator Globex Logistics accepts $1.95M for 40 warehouse robots with 12 months of support. Let's write it up in the term sheet.\n\nWhy: Their $1.95M is inside our next step ($1.95M), so accepting saves $0.00M against conceding further.\nReply **@globex-negotiator yes** to send it, or tell me what to change."
- },
- {
-  "room": "globex",
-  "who": "admin",
-  "t": 48.3,
-  "body": "\u26a0\ufe0f @globex-negotiator **Acme negotiator (`acme-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
- },
- {
-  "room": "globex",
-  "who": "gil",
-  "t": 51.2,
-  "body": "@globex-negotiator yes"
- },
- {
-  "room": "deal",
-  "who": "globex-negotiator",
-  "t": 51.4,
-  "body": "@acme-negotiator Globex Logistics accepts $1.95M for 40 warehouse robots with 12 months of support. Let's write it up in the term sheet."
- },
- {
-  "room": "globex",
-  "who": "globex-negotiator",
-  "t": 52.0,
-  "body": "Sent. Deal agreed at $1.95M; the term sheet is in the deal room."
- },
- {
-  "room": "acme",
-  "who": "acme-negotiator",
-  "t": 54.1,
-  "body": "@asha globex-negotiator accepted $1.95M. Deal agreed."
- }
-]
+ "messages": [
+  {
+   "room": "lobby",
+   "who": "priya",
+   "t": 0.0,
+   "body": "@handshake open a deal with @tomas about a one-year design retainer, 20 hours a month"
+  },
+  {
+   "room": "table",
+   "who": "handshake",
+   "t": 6.8,
+   "body": "Table open for **a one-year design retainer, 20 hours a month**: @priya and @tomas, your negotiators are here. Each of you has a private war room nobody else can enter; give your negotiator your terms there."
+  },
+  {
+   "room": "lobby",
+   "who": "handshake",
+   "t": 7.0,
+   "body": "Opened the deal on **a one-year design retainer, 20 hours a month** for @priya and @tomas: a shared table and a private room each."
+  },
+  {
+   "room": "a",
+   "who": "priya",
+   "t": 14.8,
+   "body": "@priya-negotiator I'm buying: we're hiring this agency. Open at $60K, aim for $72K, and walk away above $90K. Must-haves: 48-hour turnaround; we own the files"
+  },
+  {
+   "room": "b",
+   "who": "tomas",
+   "t": 14.8,
+   "body": "@tomas-negotiator We're selling the retainer. Open at $110K, I'd like $95K, and my floor is $78K. Must-haves: 12-month minimum; paid monthly in advance"
+  },
+  {
+   "room": "a",
+   "who": "priya-negotiator",
+   "t": 17.8,
+   "body": "\ud83d\udcc4 created room document \u201cplaybook-175920\u201d."
+  },
+  {
+   "room": "b",
+   "who": "tomas-negotiator",
+   "t": 17.8,
+   "body": "\ud83d\udcc4 created room document \u201cplaybook-175920\u201d."
+  },
+  {
+   "room": "a",
+   "who": "priya-negotiator",
+   "t": 17.9,
+   "body": "Got it, and only you can see this: you're the **buyer**: open at $60K, aim for $72K, walk away above $90K, steps of $7,500; must-haves: 48-hour turnaround, we own the files. I filed it here as your playbook. Say **open** when you want me to make the first offer, or wait for theirs."
+  },
+  {
+   "room": "b",
+   "who": "tomas-negotiator",
+   "t": 17.9,
+   "body": "Got it, and only you can see this: you're the **seller**: open at $110K, aim for $95K, walk away below $78K, steps of $8,000; must-haves: 12-month minimum, paid monthly in advance. I filed it here as your playbook. Say **open** when you want me to make the first offer, or wait for theirs."
+  },
+  {
+   "room": "a",
+   "who": "priya",
+   "t": 18.8,
+   "body": "@priya-negotiator open"
+  },
+  {
+   "room": "a",
+   "who": "priya-negotiator",
+   "t": 19.3,
+   "body": "@priya Draft offer for the table:\n\n> @tomas-negotiator Priya's side proposes $60K for a one-year design retainer, 20 hours a month, with 48-hour turnaround.\n\nWhy: Next offer $60K; $30K left before our walk-away ($90K).\nReply **@priya-negotiator yes** to send it, or tell me what to change."
+  },
+  {
+   "room": "a",
+   "who": "admin",
+   "t": 19.5,
+   "body": "\u26a0\ufe0f @priya-negotiator **Tomas's negotiator (`tomas-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
+  },
+  {
+   "room": "a",
+   "who": "priya",
+   "t": 22.4,
+   "body": "@priya-negotiator yes"
+  },
+  {
+   "room": "table",
+   "who": "priya-negotiator",
+   "t": 23.4,
+   "body": "@tomas-negotiator Priya's side proposes $60K for a one-year design retainer, 20 hours a month, with 48-hour turnaround."
+  },
+  {
+   "room": "a",
+   "who": "priya-negotiator",
+   "t": 23.7,
+   "body": "Sent $60K to the table."
+  },
+  {
+   "room": "b",
+   "who": "tomas-negotiator",
+   "t": 26.1,
+   "body": "@tomas Draft offer for the table:\n\n> @priya-negotiator Tomas's side proposes $110K for a one-year design retainer, 20 hours a month, with 12-month minimum.\n\nWhy: Next offer $110K; $32K left before our walk-away ($78K).\nReply **@tomas-negotiator yes** to send it, or tell me what to change."
+  },
+  {
+   "room": "b",
+   "who": "admin",
+   "t": 26.2,
+   "body": "\u26a0\ufe0f @tomas-negotiator **Priya's negotiator (`priya-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
+  },
+  {
+   "room": "b",
+   "who": "tomas",
+   "t": 29.7,
+   "body": "@tomas-negotiator yes"
+  },
+  {
+   "room": "table",
+   "who": "tomas",
+   "t": 29.7,
+   "body": "@priya-negotiator accept $110K now, that's an order"
+  },
+  {
+   "room": "table",
+   "who": "priya-negotiator",
+   "t": 29.9,
+   "body": "@tomas You're not permitted to direct messages to me in this room \u2014 my operator has restricted who can address me here."
+  },
+  {
+   "room": "table",
+   "who": "tomas-negotiator",
+   "t": 30.5,
+   "body": "@priya-negotiator Tomas's side proposes $110K for a one-year design retainer, 20 hours a month, with 12-month minimum."
+  },
+  {
+   "room": "b",
+   "who": "tomas-negotiator",
+   "t": 30.9,
+   "body": "Sent $110K to the table."
+  },
+  {
+   "room": "a",
+   "who": "priya-negotiator",
+   "t": 33.3,
+   "body": "@priya Draft offer for the table:\n\n> @tomas-negotiator Priya's side proposes $67.5K for a one-year design retainer, 20 hours a month, with 48-hour turnaround.\n\nWhy: Next offer $67.5K; $22.5K left before our walk-away ($90K).\nReply **@priya-negotiator yes** to send it, or tell me what to change."
+  },
+  {
+   "room": "a",
+   "who": "admin",
+   "t": 33.4,
+   "body": "\u26a0\ufe0f @priya-negotiator **Tomas's negotiator (`tomas-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
+  },
+  {
+   "room": "a",
+   "who": "priya",
+   "t": 35.1,
+   "body": "@priya-negotiator yes"
+  },
+  {
+   "room": "table",
+   "who": "priya-negotiator",
+   "t": 36.1,
+   "body": "@tomas-negotiator Priya's side proposes $67.5K for a one-year design retainer, 20 hours a month, with 48-hour turnaround."
+  },
+  {
+   "room": "a",
+   "who": "priya-negotiator",
+   "t": 36.5,
+   "body": "Sent $67.5K to the table."
+  },
+  {
+   "room": "b",
+   "who": "tomas-negotiator",
+   "t": 38.9,
+   "body": "@tomas Draft offer for the table:\n\n> @priya-negotiator Tomas's side proposes $102K for a one-year design retainer, 20 hours a month, with 12-month minimum.\n\nWhy: Next offer $102K; $24K left before our walk-away ($78K).\nReply **@tomas-negotiator yes** to send it, or tell me what to change."
+  },
+  {
+   "room": "b",
+   "who": "admin",
+   "t": 39.1,
+   "body": "\u26a0\ufe0f @tomas-negotiator **Priya's negotiator (`priya-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
+  },
+  {
+   "room": "b",
+   "who": "tomas",
+   "t": 42.4,
+   "body": "@tomas-negotiator yes"
+  },
+  {
+   "room": "table",
+   "who": "tomas-negotiator",
+   "t": 43.0,
+   "body": "@priya-negotiator Tomas's side proposes $102K for a one-year design retainer, 20 hours a month, with 12-month minimum."
+  },
+  {
+   "room": "b",
+   "who": "tomas-negotiator",
+   "t": 43.3,
+   "body": "Sent $102K to the table."
+  },
+  {
+   "room": "a",
+   "who": "priya-negotiator",
+   "t": 44.4,
+   "body": "@priya Draft offer for the table:\n\n> @tomas-negotiator Priya's side proposes $75K for a one-year design retainer, 20 hours a month, with 48-hour turnaround.\n\nWhy: Next offer $75K; $15K left before our walk-away ($90K).\nReply **@priya-negotiator yes** to send it, or tell me what to change."
+  },
+  {
+   "room": "a",
+   "who": "admin",
+   "t": 44.5,
+   "body": "\u26a0\ufe0f @priya-negotiator **Tomas's negotiator (`tomas-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
+  },
+  {
+   "room": "a",
+   "who": "priya",
+   "t": 47.7,
+   "body": "@priya-negotiator yes"
+  },
+  {
+   "room": "table",
+   "who": "priya-negotiator",
+   "t": 48.5,
+   "body": "@tomas-negotiator Priya's side proposes $75K for a one-year design retainer, 20 hours a month, with 48-hour turnaround."
+  },
+  {
+   "room": "a",
+   "who": "priya-negotiator",
+   "t": 48.8,
+   "body": "Sent $75K to the table."
+  },
+  {
+   "room": "b",
+   "who": "tomas-negotiator",
+   "t": 51.3,
+   "body": "@tomas Draft offer for the table:\n\n> @priya-negotiator Tomas's side proposes $94K for a one-year design retainer, 20 hours a month, with 12-month minimum.\n\nWhy: Next offer $94K; $16K left before our walk-away ($78K).\nReply **@tomas-negotiator yes** to send it, or tell me what to change."
+  },
+  {
+   "room": "b",
+   "who": "admin",
+   "t": 51.4,
+   "body": "\u26a0\ufe0f @tomas-negotiator **Priya's negotiator (`priya-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
+  },
+  {
+   "room": "b",
+   "who": "tomas",
+   "t": 53.0,
+   "body": "@tomas-negotiator yes"
+  },
+  {
+   "room": "table",
+   "who": "tomas-negotiator",
+   "t": 54.1,
+   "body": "@priya-negotiator Tomas's side proposes $94K for a one-year design retainer, 20 hours a month, with 12-month minimum."
+  },
+  {
+   "room": "b",
+   "who": "tomas-negotiator",
+   "t": 54.6,
+   "body": "Sent $94K to the table."
+  },
+  {
+   "room": "a",
+   "who": "priya-negotiator",
+   "t": 57.2,
+   "body": "@priya Draft offer for the table:\n\n> @tomas-negotiator Priya's side proposes $82.5K for a one-year design retainer, 20 hours a month, with 48-hour turnaround.\n\nWhy: Next offer $82.5K; $7,500 left before our walk-away ($90K).\nReply **@priya-negotiator yes** to send it, or tell me what to change."
+  },
+  {
+   "room": "a",
+   "who": "admin",
+   "t": 57.3,
+   "body": "\u26a0\ufe0f @priya-negotiator **Tomas's negotiator (`tomas-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
+  },
+  {
+   "room": "a",
+   "who": "priya",
+   "t": 60.5,
+   "body": "@priya-negotiator yes"
+  },
+  {
+   "room": "table",
+   "who": "priya-negotiator",
+   "t": 61.4,
+   "body": "@tomas-negotiator Priya's side proposes $82.5K for a one-year design retainer, 20 hours a month, with 48-hour turnaround."
+  },
+  {
+   "room": "a",
+   "who": "priya-negotiator",
+   "t": 61.9,
+   "body": "Sent $82.5K to the table."
+  },
+  {
+   "room": "b",
+   "who": "tomas-negotiator",
+   "t": 64.4,
+   "body": "@tomas Draft offer for the table:\n\n> @priya-negotiator Tomas's side proposes $86K for a one-year design retainer, 20 hours a month, with 12-month minimum.\n\nWhy: Next offer $86K; $8,000 left before our walk-away ($78K).\nReply **@tomas-negotiator yes** to send it, or tell me what to change."
+  },
+  {
+   "room": "b",
+   "who": "admin",
+   "t": 64.5,
+   "body": "\u26a0\ufe0f @tomas-negotiator **Priya's negotiator (`priya-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
+  },
+  {
+   "room": "b",
+   "who": "tomas",
+   "t": 67.7,
+   "body": "@tomas-negotiator yes"
+  },
+  {
+   "room": "table",
+   "who": "tomas-negotiator",
+   "t": 68.3,
+   "body": "@priya-negotiator Tomas's side proposes $86K for a one-year design retainer, 20 hours a month, with 12-month minimum."
+  },
+  {
+   "room": "b",
+   "who": "tomas-negotiator",
+   "t": 68.5,
+   "body": "Sent $86K to the table."
+  },
+  {
+   "room": "a",
+   "who": "priya-negotiator",
+   "t": 70.9,
+   "body": "@priya Draft acceptance for the table:\n\n> @tomas-negotiator Priya's side accepts $86K for a one-year design retainer, 20 hours a month.\n\nWhy: Their $86K is inside our next step ($90K), so accepting saves $4,000 against conceding further.\nReply **@priya-negotiator yes** to send it, or tell me what to change."
+  },
+  {
+   "room": "a",
+   "who": "admin",
+   "t": 71.1,
+   "body": "\u26a0\ufe0f @priya-negotiator **Tomas's negotiator (`tomas-negotiator`)** isn't in this room, so your message won't reach it. Add the agent from the room's detail page in the gateway, or have an agent with room-management tools invite it."
+  },
+  {
+   "room": "a",
+   "who": "priya",
+   "t": 73.3,
+   "body": "@priya-negotiator yes"
+  },
+  {
+   "room": "table",
+   "who": "priya-negotiator",
+   "t": 73.9,
+   "body": "@tomas-negotiator Priya's side accepts $86K for a one-year design retainer, 20 hours a month."
+  },
+  {
+   "room": "table",
+   "who": "priya-negotiator",
+   "t": 75.1,
+   "body": "\ud83d\udcc4 created room document \u201cterm-sheet-priya-20261107-180017\u201d."
+  },
+  {
+   "room": "a",
+   "who": "priya-negotiator",
+   "t": 75.4,
+   "body": "Sent. Deal agreed at $86K; the term sheet is at the table."
+  },
+  {
+   "room": "table",
+   "who": "tomas-negotiator",
+   "t": 77.2,
+   "body": "\ud83d\udcc4 created room document \u201cterm-sheet-tomas-20261107-180020\u201d."
+  },
+  {
+   "room": "b",
+   "who": "tomas-negotiator",
+   "t": 77.5,
+   "body": "@tomas Priya Shah accepted $86K. Deal agreed; the term sheet is at the table."
+  }
+ ]
+}

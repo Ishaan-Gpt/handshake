@@ -1,30 +1,24 @@
-"""Keeps the live demo alive: a fresh Acme x Globex deal every few minutes, with Asha and Gil approving each move.
+"""Keeps a live demo going: a fresh deal between the two demo seats every few minutes, played through the chat.
 
-    python scripts/live.py            # with both negotiators running
+    python scripts/live.py            # with the concierge and the negotiators running
 """
 import sys
 import time
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT))
-from handshake.chat import Person  # noqa: E402
-from scripts import drive  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from scripts import demo  # noqa: E402
 
-GAP = 240  # seconds between deals
-
-
-def main():
-    asha, gil = Person("acme"), Person("globex")
-    while True:
-        gil.say("globex-war-room", "@globex-negotiator new deal")  # Globex's agent forgets the last deal too
-        time.sleep(3)
-        try:
-            drive.main()
-        except Exception as e:
-            print("deal failed:", e)
-        time.sleep(GAP)
-
+SUBJECTS = ["a one-year design retainer, 20 hours a month", "a six-month data-labelling contract", "a website rebuild, fixed price",
+            "a three-year software licence for 200 seats"]
 
 if __name__ == "__main__":
-    main()
+    n = 0
+    while True:
+        sys.argv = [sys.argv[0], "--subject", f"{SUBJECTS[n % len(SUBJECTS)]} ({time.strftime('%H:%M')})"]
+        try:
+            demo.main()
+        except Exception as e:
+            print("deal failed:", e)
+        n += 1
+        time.sleep(240)

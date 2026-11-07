@@ -3,8 +3,7 @@
     python scripts/up.py
 
 Writes deploy/.env with fresh secrets (first run only), starts Switch 0.31.0 with Mattermost and the Gateway in Docker,
-waits for it, then runs bootstrap.py (people, chat accounts, agents), rooms.py (war rooms, deal room, links, groups)
-and policy.py (who may make each agent act).
+waits for it, and registers the Handshake concierge (the agent that opens deals from #handshake-lobby).
 """
 import secrets
 import subprocess
@@ -52,11 +51,15 @@ def main():
     while "exited" not in subprocess.run(["docker", "compose", "-p", "handshake", "ps", "-a", "setup", "--format", "{{.State}}"],
                                          cwd=DEPLOY, capture_output=True, text=True).stdout:
         time.sleep(3)
-    for step in ("bootstrap", "rooms", "policy"):
-        subprocess.run([sys.executable, f"scripts/{step}.py"], cwd=ROOT, check=True)
-    print("\nReady. Start the agents in two terminals:\n  python -m handshake.negotiator acme\n  python -m handshake.negotiator globex\n"
-          "Then open http://localhost:8065 (Mattermost) and sign in as asha or gil (passwords in .state.json),\n"
-          "or play both humans with: python scripts/drive.py")
+    sys.path.insert(0, str(ROOT))
+    from handshake import seats
+    seats.ensure_concierge()
+    print("\nReady. Next:\n  python scripts/join.py you \"Your Name\"     (and one for the other side)\n"
+          "  python -m handshake.concierge               (terminal 2: opens deals from #handshake-lobby)\n"
+          "  python -m handshake.negotiator              (terminal 3: every seat's negotiator)\n"
+          "Then sign in at http://localhost:8065 and type in #handshake-lobby:\n"
+          "  @handshake open a deal with @them about whatever you're agreeing\n"
+          "Or watch a whole deal play out: python scripts/demo.py")
 
 
 if __name__ == "__main__":
