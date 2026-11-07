@@ -40,6 +40,34 @@ got it out. The same 20 against a shared deal bot, and against your own bot with
 - **Where to read the code that matters:** the strategy that never sees a model (`handshake/strategy.py`), the rules
   that parse terms (`handshake/terms.py`), the agent loop and cursor (`handshake/agentloop.py`).
 
+## How it works, in one picture
+
+```mermaid
+flowchart LR
+  subgraph SW["Switch (self-hosted) with its bundled Mattermost"]
+    LOBBY["#handshake-lobby"]
+    WA["War room A: owner A + agent A only"]
+    WB["War room B: owner B + agent B only"]
+    TABLE["Deal table: both agents, both owners"]
+  end
+  LOBBY -->|"@handshake open a deal with @them"| CON["Concierge agent"]
+  CON -->|"create_room, link_rooms, room group"| WA
+  CON --> WB
+  CON --> TABLE
+  WA -->|"limits filed as a room document"| PA["Playbook A"]
+  PA -->|"strategy.py decides the number in plain code"| DRAFT["Draft + reasoning, shown in war room A"]
+  DRAFT -->|"owner A replies yes"| TABLE
+  TABLE -->|"offer, counter, accept"| WB
+  WB -. "agent B has no seat in war room A: 403" .-x WA
+  TABLE --> CHECK["Leak check: table read back after every deal"]
+```
+
+One deal, step by step: the lobby request makes the concierge build the three rooms; each side files its limits in its own
+war room; the strategy (plain code, `handshake/strategy.py`) picks every number from those limits and a model only words
+it; the draft goes to the owner first and reaches the table on a `yes`; the other side's agent cannot enter your war
+room (Switch answers `403 Agent is not a member of this room`); after the deal both negotiators read the table back and
+report whether a limit leaked.
+
 ## Where it runs
 
 The chat is **Mattermost**, the team chat Switch bundles when you self-host it, and one of the apps the hackathon lists
