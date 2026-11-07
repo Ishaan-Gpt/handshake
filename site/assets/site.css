@@ -13,7 +13,7 @@
 }
 @media (max-width: 760px) { :root { --u: calc(100vw / 520); } }
 * { box-sizing: border-box; }
-html { background: var(--ink-950); color: var(--cel-100); -webkit-font-smoothing: antialiased; }
+html { background: var(--ink-950); color: var(--cel-100); -webkit-font-smoothing: antialiased; overflow-x: clip; }
 body { margin: 0; font: 400 17px/1.6 var(--sans); background: var(--ink-950); overflow-x: clip; }
 a { color: inherit; }
 code, pre { font-family: var(--mono); }
@@ -176,13 +176,6 @@ code, pre { font-family: var(--mono); }
 .js [data-reveal] { opacity: 0; transform: translateY(16px); filter: blur(6px); transition: opacity .9s var(--ease), transform .9s var(--ease), filter .9s var(--ease); }
 .js [data-reveal].is-in { opacity: 1; transform: none; filter: none; }
 
-/* Intro: three lamps switch on, then the dark lifts. */
-.intro { position: fixed; inset: 0; z-index: 50; background: var(--ink-950); display: none; place-items: center; align-content: center; gap: 18px; grid-auto-flow: row; }
-html[data-intro="lamps"] .intro { display: grid; }
-.intro { grid-template-columns: repeat(3, 14px); justify-content: center; column-gap: 44px; }
-.intro__lamp { width: 14px; height: 14px; border-radius: 50%; background: var(--ink-700); }
-.intro p { grid-column: 1 / -1; margin: 18px 0 0; text-align: center; font: italic 300 22px var(--serif); color: var(--cel-300); opacity: 0; }
-
 @media (prefers-reduced-motion: reduce) {
   .js [data-reveal] { opacity: 1; transform: none; filter: none; transition: none; }
   .btn, .btn:hover { transition: none; transform: none; }
@@ -232,3 +225,148 @@ html[data-intro="lamps"] .intro { display: grid; }
 @media (max-width: 760px) { .live { grid-template-columns: 1fr; } }
 .agents .ways { margin-top: calc(48 * var(--u)); }
 @media (max-width: 900px) { .how__steps { margin-top: 18px; } .step { align-content: start; } }
+
+/* ---------- the film: one pinned sequence over the 3D model ---------- */
+.film { position: relative; height: 620svh; }
+.film__stage { position: sticky; top: 0; height: 100svh; overflow: clip; }
+.film__gl { position: absolute; inset: 0; }
+.film__gl canvas { display: block; width: 100% !important; height: 100% !important; opacity: 0; transition: opacity 1.2s var(--ease); }
+.gl-ready .film__gl canvas { opacity: 1; }
+.film__veil { position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, oklch(0.15 0.012 165 / .92) 0%, oklch(0.15 0.012 165 / .55) 36%, transparent 62%),
+              linear-gradient(0deg, oklch(0.15 0.012 165 / .7), transparent 22%); }
+.film__copy { position: absolute; inset: 0; padding: calc(110 * var(--u)) clamp(16px, 4vw, 56px) calc(60 * var(--u)); pointer-events: none; }
+.panel { position: absolute; left: clamp(16px, 4vw, 56px); top: 50%; translate: 0 -50%; width: min(560px, 44vw); opacity: 0; filter: blur(8px);
+  transform: translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease), filter .8s var(--ease); }
+.panel.on { opacity: 1; filter: none; transform: none; pointer-events: auto; }
+.panel--hero .big { font-size: calc(78 * var(--u)); }
+.panel--end { width: min(820px, 70vw); }
+.film__ex { margin: 26px 0 0; font: 400 12px var(--mono); color: var(--cel-400); }
+.film__ex span { color: var(--cel-100); }
+.film__ticks { position: absolute; left: clamp(16px, 4vw, 56px); bottom: 28px; display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.film__ticks li { width: 28px; height: 2px; background: var(--ink-600); transition: background .6s var(--ease); }
+.film__ticks li.on { background: var(--cel-300); }
+.film__hint { position: absolute; right: clamp(16px, 4vw, 56px); bottom: 22px; margin: 0; font: 400 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--cel-400); }
+.no-gl .film__gl { background: radial-gradient(60% 50% at 70% 50%, oklch(0.32 0.04 160 / .5), transparent); }
+@media (max-width: 900px) {
+  .panel { width: auto; right: 16px; top: auto; bottom: 64px; translate: 0 0; }
+  .panel--hero .big { font-size: 38px; }
+  .film__veil { background: linear-gradient(0deg, oklch(0.15 0.012 165 / .96) 0%, oklch(0.15 0.012 165 / .75) 45%, transparent 75%); }
+  .panel .lede { font-size: 15.5px; }
+}
+
+/* ---------- try it: three rooms you can type in ---------- */
+.play { margin-top: calc(48 * var(--u)); display: grid; grid-template-columns: 1.1fr 1fr .8fr; gap: 14px; }
+@media (max-width: 1000px) { .play { grid-template-columns: 1fr; } }
+.play__room { display: grid; grid-template-rows: auto 1fr auto auto; min-height: 420px; background: var(--ink-900); border: 1px solid var(--ink-800); border-radius: 3px; overflow: hidden; }
+.play__room header { display: flex; align-items: baseline; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--ink-800); font: 500 14px var(--sans); color: var(--cel-50); }
+.play__room header small { font: 400 11px var(--mono); color: var(--cel-500); }
+.play__room .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cel-300); box-shadow: 0 0 10px var(--cel-300); align-self: center; }
+.play__room--them .dot { background: var(--wax-500); box-shadow: 0 0 10px var(--wax-500); }
+.play__log { padding: 14px 16px; display: grid; align-content: start; gap: 10px; max-height: 320px; overflow: auto; scrollbar-width: thin; }
+.line { display: grid; gap: 2px; font-size: 14px; color: var(--cel-100); }
+.line b { font: 500 10.5px var(--mono); text-transform: uppercase; letter-spacing: .06em; color: var(--cel-400); }
+.line.agent span { color: var(--cel-200); }
+.line.draft span { padding-left: 10px; border-left: 2px solid var(--cel-500); }
+.line.them b { color: var(--cel-300); }
+.line.switch b { color: var(--wax-300); }
+.line.switch span { color: var(--wax-300); }
+.play__form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--ink-800); }
+.play__form input { flex: 1; min-width: 0; background: var(--ink-950); border: 1px solid var(--ink-700); color: var(--cel-50); font: 400 13px var(--sans); padding: 10px 12px; border-radius: 2px; outline: none; transition: border-color .3s var(--ease); }
+.play__form input:focus { border-color: var(--cel-400); }
+.go { border: 0; cursor: pointer; padding: 10px 16px; border-radius: 2px; font: 600 13px var(--sans); background: var(--paper); color: var(--paper-ink); transition: transform .3s var(--ease); }
+.go:active { transform: scale(.96); }
+.go--quiet { background: transparent; color: var(--cel-100); box-shadow: inset 0 0 0 1px var(--ink-600); }
+.play__acts { display: flex; gap: 8px; padding: 0 12px 12px; }
+.chip { cursor: pointer; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--ink-700); background: none; color: var(--cel-200); font: 400 12px var(--mono); transition: border-color .3s var(--ease), color .3s var(--ease); }
+.chip:hover { border-color: var(--cel-400); color: var(--cel-50); }
+.play__locked { display: grid; place-items: center; align-content: center; gap: 14px; padding: 24px; text-align: center; grid-row: 2 / -1;
+  background: repeating-linear-gradient(135deg, var(--ink-900) 0 8px, var(--ink-850) 8px 16px); }
+.play__locked svg { width: 40px; height: 40px; color: var(--wax-400); }
+.play__locked p { margin: 0; font: 400 12.5px/1.6 var(--mono); color: var(--cel-300); max-width: 28ch; }
+.play__room--them.open .play__locked { background: var(--ink-900); }
+.play__room--them.open .play__locked svg { color: var(--cel-300); }
+.play__fine { margin-top: 16px; font: 400 12px var(--mono); color: var(--cel-500); }
+
+@media (max-width: 900px) {
+  .film__veil { background: linear-gradient(0deg, oklch(0.15 0.012 165 / .97) 0%, oklch(0.15 0.012 165 / .88) 40%, transparent 58%); }
+  .panel { bottom: 58px; }
+  .panel--hero .lede { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .panel .bubble { margin-top: 14px; }
+}
+
+/* ---------- The Switch layer ---------- */
+:root {
+  --lamp: oklch(0.95 0.075 108); --lamp-edge: oklch(0.80 0.11 104);
+  --glass: oklch(0.36 0.02 165 / .5); --glass-hi: oklch(0.72 0.03 160 / .55); --glass-lo: oklch(0.22 0.02 165 / .75);
+  --metal-hi: var(--cel-300); --metal-lo: var(--ink-700); --limb: var(--cel-300); --limb-hi: var(--cel-50);
+  --out: cubic-bezier(.16, 1, .3, 1); --pop: cubic-bezier(.34, 1.32, .64, 1);
+}
+/* The loader is a switch: the track fills with real progress, then it flips and the light spreads from it. */
+.intro { position: fixed; inset: 0; z-index: 50; background: var(--ink-950); display: none; place-items: center; align-content: center; gap: 26px;
+  --x: 50%; --y: 50%; --r: -80px;
+  -webkit-mask: radial-gradient(circle at var(--x) var(--y), transparent var(--r), #000 calc(var(--r) + 80px));
+  mask: radial-gradient(circle at var(--x) var(--y), transparent var(--r), #000 calc(var(--r) + 80px)); }
+html[data-intro="switch"] .intro { display: grid; }
+.sw { position: relative; width: clamp(120px, 14vw, 168px); aspect-ratio: 2 / 1; border-radius: 999px; overflow: hidden; background: var(--ink-850);
+  box-shadow: inset 0 3px 8px oklch(0 0 0 / .55), inset 0 0 0 1px var(--ink-700), 0 1px 0 oklch(1 0 0 / .04); }
+.sw__fill { position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, var(--cel-600, oklch(0.5 0.05 160)), var(--cel-400));
+  transform: scaleX(.12); transform-origin: 0 50%; opacity: .55; transition: opacity .4s var(--out); }
+.sw.on .sw__fill { opacity: 1; }
+.sw__knob { position: absolute; top: 8px; left: 8px; height: calc(100% - 16px); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, oklch(1 0 0), var(--paper) 46%, var(--cel-200));
+  box-shadow: 0 6px 14px -2px oklch(0 0 0 / .5), inset 0 -3px 6px oklch(0.6 0.03 160 / .35); }
+.intro__t { margin: 0; font: 400 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--cel-400); font-variant-numeric: tabular-nums; }
+
+/* Little switches: sound, approve, progress. A press squashes the knob; a flip overshoots a hair. */
+.flip { all: unset; box-sizing: border-box; display: inline-flex; align-items: center; gap: 9px; cursor: pointer; font: 400 12px var(--mono); color: var(--cel-200); -webkit-tap-highlight-color: transparent; }
+.flip i { position: relative; flex: none; width: 36px; height: 20px; border-radius: 99px; background: var(--ink-700); box-shadow: inset 0 1px 3px oklch(0 0 0 / .55); transition: background .35s var(--out); }
+.flip i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%;
+  background: radial-gradient(circle at 36% 30%, oklch(1 0 0), var(--paper) 50%, var(--cel-200)); box-shadow: 0 2px 4px oklch(0 0 0 / .45);
+  transition: transform .45s var(--pop); transform: translateX(var(--kx, 0px)); }
+.flip[aria-checked="true"] i { background: var(--cel-500); }
+.flip[aria-checked="true"] i::after { --kx: 16px; }
+.flip:active i::after { transform: translateX(var(--kx, 0px)) scaleX(1.18); transition-duration: .12s; }
+.flip:focus-visible { outline: 1px solid var(--cel-300); outline-offset: 4px; border-radius: 4px; }
+.flip--sm { font-size: 11px; letter-spacing: .06em; color: var(--cel-300); }
+@media (max-width: 760px) { .flip--sm span { display: none; } }
+.flip--yes { padding: 4px 12px 4px 5px; border-radius: 99px; box-shadow: inset 0 0 0 1px var(--ink-600); color: var(--cel-50); transition: box-shadow .3s var(--out); }
+.flip--yes:hover { box-shadow: inset 0 0 0 1px var(--cel-400); }
+.chrome nav { align-items: center; }
+.film__ticks { gap: 6px; }
+.film__ticks li { position: relative; width: 22px; height: 12px; border-radius: 99px; background: var(--ink-700); box-shadow: inset 0 1px 2px oklch(0 0 0 / .5); }
+.film__ticks li::after { content: ""; position: absolute; top: 2px; left: 2px; width: 8px; height: 8px; border-radius: 50%; background: var(--cel-200); transition: transform .45s var(--pop); }
+.film__ticks li.on { background: var(--cel-500); }
+.film__ticks li.on::after { transform: translateX(10px); background: var(--paper); }
+.film__hint { display: none; }
+
+/* Bulb: the stickman with a light for a head. */
+.guide { position: fixed; left: 0; bottom: 6px; z-index: 30; width: clamp(92px, 8vw, 124px); pointer-events: none; transition: opacity .5s var(--out); will-change: transform; }
+.guide.away { opacity: 0; }
+.guide__body { all: unset; display: block; width: 100%; cursor: pointer; pointer-events: auto; transform-origin: 50% 100%; -webkit-tap-highlight-color: transparent; }
+.bulb { display: block; width: 100%; height: auto; overflow: visible; }
+.limb { fill: none; stroke: url(#g-limb); stroke-width: 8.5; stroke-linecap: round; stroke-linejoin: round; }
+.limb--back { stroke: var(--cel-500); }
+.bulb__shadow { fill: oklch(0.05 0.01 165 / .55); }
+.bulb__pool { fill: var(--lamp); opacity: 0; filter: blur(7px); }
+.bulb__halo { opacity: 0; mix-blend-mode: screen; }
+.bulb__glass { stroke: oklch(0.85 0.03 160 / .4); stroke-width: 1; }
+.bulb__glow { opacity: 0; }
+.bulb__thread { stroke: var(--ink-850); stroke-width: 1.1; fill: none; }
+.bulb__wire { stroke: var(--ink-600); stroke-width: 1.2; fill: none; }
+.bulb__fil { stroke: var(--lamp); stroke-width: 1.7; fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.bulb__eyes { fill: var(--ink-900); }
+.bulb__shine { stroke: oklch(1 0 0 / .6); stroke-width: 2.6; fill: none; stroke-linecap: round; }
+.guide__say { position: absolute; bottom: 80%; right: 80%; width: max-content; max-width: min(300px, 62vw); margin: 0; padding: 13px 16px 14px;
+  background: var(--paper); color: var(--paper-ink); font: 400 15px/1.45 var(--sans); border-radius: 16px 16px 4px 16px;
+  box-shadow: 0 18px 40px -18px oklch(0 0 0 / .8), 0 1px 0 oklch(1 0 0 / .4) inset;
+  opacity: 0; transform: translateY(8px) scale(.94); transform-origin: 100% 100%; transition: opacity .4s var(--out), transform .7s var(--out); }
+.guide.is-left .guide__say { right: auto; left: 78%; border-radius: 16px 16px 16px 4px; transform-origin: 0 100%; }
+.guide__say.on { opacity: 1; transform: none; }
+.guide__say span { display: inline-block; white-space: pre; opacity: 0; filter: blur(3px); transform: translateY(4px); transition: opacity .35s var(--out), filter .5s var(--out), transform .6s var(--out); }
+.guide__say.on span { opacity: 1; filter: blur(0); transform: none; }
+@media (max-width: 760px) {
+  .guide { width: 70px; bottom: 4px; }
+  .guide__say { right: 6px; bottom: 100%; font-size: 14px; max-width: calc(100vw - 32px); border-radius: 16px 16px 4px 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .guide__say, .guide__say span { transition: none; } }

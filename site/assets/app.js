@@ -114,7 +114,7 @@
   /* ------------------------------------------------------------------ slips through the hatch */
   const stage = $("[data-stage]"), plan = $("[data-plan]"), layer = $("[data-slips]");
   let geo = null;
-  const relayout = () => { geo = drawPlan(plan); };
+  const relayout = () => { if (plan) geo = drawPlan(plan); };
 
   function slip(side, price, label, { order = false } = {}) {
     const el = document.createElement("div");
@@ -171,11 +171,12 @@
     run();
   }
   let visible = true;
-  new IntersectionObserver(([e]) => { const was = visible; visible = e.isIntersecting; if (visible && !was) heroLoop(); }).observe(stage);
+  if (stage) new IntersectionObserver(([e]) => { const was = visible; visible = e.isIntersecting; if (visible && !was) heroLoop(); }).observe(stage);
 
   /* ------------------------------------------------------------------ how it works: the rooms build as you scroll */
   function how() {
     const plan3 = $("[data-plan3]"), lay3 = $("[data-slips3]"), steps = $$(".step");
+    if (!plan3) return;
     let last = -1, g3 = null, built = -1;
     const place = (side, html, where, cls = "") => {
       const el = document.createElement("div"); el.className = `slip slip--${side} ${cls}`; el.innerHTML = html; lay3.append(el);
@@ -402,6 +403,6 @@
     features(); reveals(); live(); night(); how();
     deal().then(() => ScrollTrigger?.refresh());
     doors();
-    intro(() => heroLoop());
+    if (stage) heroLoop();
   });
 })();
