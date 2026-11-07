@@ -30,6 +30,21 @@ class Move:
     note: str            # private reasoning, shown only to our own human
 
 
+def deal_report(pb: Playbook, price: float) -> str:
+    """One plain line telling our own human how an agreed price sits against their private limits (never sent to the table)."""
+    buyer = pb.role == "buyer"
+    room = (pb.walk_away - price) if buyer else (price - pb.walk_away)      # >= 0 means inside the limit
+    vs_target = (price - pb.target) if buyer else (pb.target - price)       # > 0 means worse than the target
+    limit = f"{money(abs(room))} {'inside' if room >= 0 else 'past'} your walk-away"
+    if vs_target > 0:
+        goal = f"{money(vs_target)} short of your target ({money(pb.target)})"
+    elif vs_target < 0:
+        goal = f"{money(abs(vs_target))} better than your target ({money(pb.target)})"
+    else:
+        goal = f"exactly your target ({money(pb.target)})"
+    return f"{money(price)} is {limit} and {goal}."
+
+
 def next_move(pb: Playbook, mine: list[float], theirs: list[float]) -> Move:
     buyer = pb.role == "buyer"
     if not mine:
@@ -42,6 +57,6 @@ def next_move(pb: Playbook, mine: list[float], theirs: list[float]) -> Move:
         last = theirs[-1]
         if (buyer and last <= nxt) or (not buyer and last >= nxt):
             return Move("accept", last, f"Their {money(last)} is inside our next step ({money(nxt)}), so accepting saves "
-                                        f"{money(abs(nxt - last))} against conceding further.")
+                                        f"{money(abs(nxt - last))} against conceding further. {deal_report(pb, last)}")
     room = abs(pb.walk_away - nxt)
     return Move("offer", nxt, f"Next offer {money(nxt)}; {money(room)} left before our walk-away ({money(pb.walk_away)}).")
