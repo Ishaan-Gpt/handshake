@@ -261,7 +261,8 @@ async def main(names, poll: float = 5.0):
     """Runs the named seats, or every seat; with no names it also starts each new seat a few seconds after it joins."""
     running: dict[str, asyncio.Task] = {}
     while True:
-        for n in names or list(seats.load().get("seats", {})):
+        everyone = seats.load().get("seats", {})
+        for n in names or [u for u, seat in everyone.items() if seat.get("brain", "handshake") == "handshake"]:
             if n not in running:
                 running[n] = asyncio.create_task(Seat(n).run())
                 print(f"[handshake] seat {n} is at the table")
