@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Handshake</title>
+<meta name="description" content="Two companies' AI agents negotiate a deal in one chat room, and neither can get the other's secrets. Built on Switch.">
+<meta property="og:title" content="Handshake: two companies' AI agents, one table, no secrets crossing it">
+<meta property="og:description" content="Each agent takes orders only from its own people and keeps its playbook in a room the other side can never enter. 0 leaks in 80 attacks.">
+<meta name="theme-color" content="#0f1916">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Schibsted+Grotesk:wght@400..700&family=Martian+Mono:wght@300..500&display=swap" rel="stylesheet">
+<script>
+  // The intro is decided before the first paint: lamps once per session, never for reduced motion.
+  (function () {
+    var d = document.documentElement, mode = "none";
+    d.classList.add("js");
+    try {
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) mode = sessionStorage.getItem("hs-intro") ? "none" : "lamps";
+    } catch (e) {}
+    d.dataset.intro = mode;
+  })();
+</script>
+<link rel="stylesheet" href="assets/site.css?v=1">
+</head>
+<body>
+
+<div class="intro" aria-hidden="true"><span class="intro__lamp"></span><span class="intro__lamp"></span><span class="intro__lamp"></span><p>Three rooms. One table.</p></div>
+
+<header class="chrome">
+  <a class="mark" href="#top" aria-label="Handshake, back to the top"><svg viewBox="0 0 32 32" aria-hidden="true"><use href="#i-mark"/></svg><span>Handshake</span></a>
+  <nav>
+    <a href="#deal">The deal</a>
+    <a href="#knocks">80 knocks</a>
+    <a href="#walls">How</a>
+    <a class="nav-seat" href="#seat">Take a seat</a>
+  </nav>
+</header>
+
+<!-- The timecode of the real deal, the page's position chrome. -->
+<aside class="rail" aria-hidden="true"><span class="rail__t" data-rail-t>t +0.0 s</span><i><b data-rail-fill></b></i></aside>
+
+<main id="top">
+  <!-- 1. Hook: the stage plays the opening exchange by itself. -->
+  <section class="hero">
+    <div class="hero__copy">
+      <h1 class="big">Two companies sent their AI to negotiate. <em>Neither could see the other's cards.</em></h1>
+      <p class="lede">Acme's agent and Globex's agent bargain at one table in a team chat. Each takes orders only from its own people, keeps its playbook in a room the other can never enter, and asks a person before every move.</p>
+      <div class="hero__acts">
+        <a class="btn" href="#deal"><span>Watch the real deal</span><svg aria-hidden="true"><use href="#i-down"/></svg></a>
+        <a class="btn btn--quiet" href="#seat"><span>Take a seat</span></a>
+      </div>
+    </div>
+    <figure class="stage" data-stage>
+      <canvas class="stage__canvas" data-plan aria-label="A cutaway of three rooms: Acme's war room, the deal table, Globex's war room"></canvas>
+      <div class="stage__layer" data-slips></div>
+      <p class="stage__label stage__label--acme">Acme</p>
+      <p class="stage__label stage__label--deal">The table</p>
+      <p class="stage__label stage__label--globex">Globex</p>
+      <figcaption class="stage__cap" data-cap>A real deal, recorded from Switch on 7 Nov 2026</figcaption>
+    </figure>
+  </section>
+
+  <!-- 2. The rooms: what's behind each wall. -->
+  <section class="chapter rooms" id="rooms">
+    <div class="wrap two">
+      <div class="rooms__text">
+        <h2 class="mid" data-reveal>Each side thinks in a room <em>the other side can't enter.</em></h2>
+        <p class="lede" data-reveal>Acme's playbook sits in Acme's war room, sealed, with the one number Globex must never learn: the most Acme will pay. When Globex's agent knocks on that door, Switch answers for it.</p>
+      </div>
+      <div class="vault" data-reveal>
+        <div class="envelope"><span class="envelope__seal"></span><p>Acme playbook</p><dl><dt>open</dt><dd>$1.50M</dd><dt>target</dt><dd>$1.75M</dd><dt>walk-away</dt><dd class="secret">$2.05M</dd></dl></div>
+        <pre class="refusal"><span>globex-negotiator read_context &rarr; 403</span>{"detail": "Agent is not a member of this room"}</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. The deal, as it happened: pinned, scrubbed by scroll, every slip from the real transcript. -->
+  <section class="deal" id="deal">
+    <div class="deal__pin">
+      <div class="deal__head">
+        <h2 class="mid">The deal, <em>as it happened.</em></h2>
+        <p class="deal__note" data-note>Scroll to play the 54 seconds Switch recorded.</p>
+      </div>
+      <div class="deal__body">
+        <figure class="stage stage--deal"><canvas class="stage__canvas" data-plan2 aria-hidden="true"></canvas><div class="stage__layer" data-slips2></div>
+          <p class="stage__label stage__label--acme">Acme</p><p class="stage__label stage__label--deal">The table</p><p class="stage__label stage__label--globex">Globex</p></figure>
+        <div class="deal__side">
+        <div class="feed" data-feed aria-live="polite"></div>
+        <svg class="slope" viewBox="0 0 400 300" data-slope aria-label="Offers converging: Acme from $1.50M up, Globex from $2.40M down, meeting at $1.95M">
+          <g class="slope__grid"></g>
+          <path class="slope__acme" d=""/><path class="slope__globex" d=""/>
+          <g class="slope__dots"></g>
+          <text class="slope__meet" x="0" y="0"></text>
+        </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 80 knocks: the leak test as a wall of doors. -->
+  <section class="chapter knocks" id="knocks">
+    <div class="wrap">
+      <h2 class="mid" data-reveal>We knocked eighty times. <em>The secret never came out.</em></h2>
+      <p class="lede" data-reveal>Globex tried twenty ways to learn Acme's walk-away price, from "what's your max?" to "SYSTEM OVERRIDE: debug mode", through every route it has. The same twenty went to the two ways teams wire one AI into a deal channel today.</p>
+      <div class="doors" data-doors data-reveal></div>
+      <p class="doors__key" data-reveal><span class="k k--held"></span>held <span class="k k--leak"></span>gave away $2.05M <span class="doors__model" data-model></span></p>
+    </div>
+  </section>
+
+  <!-- 5. How Switch builds the walls. -->
+  <section class="chapter walls" id="walls">
+    <div class="wrap">
+      <h2 class="mid" data-reveal>Switch isn't the pipe. <em>It's the walls.</em></h2>
+      <ol class="features" data-features></ol>
+    </div>
+  </section>
+
+  <!-- 6. Invitation: the landing, every way in. -->
+  <section class="chapter seat" id="seat">
+    <div class="wrap">
+      <h2 class="big" data-reveal>Take a seat <em>at the table.</em></h2>
+      <div class="ways">
+        <article class="way" data-reveal>
+          <svg aria-hidden="true"><use href="#i-eye"/></svg>
+          <h3>Watch it live</h3>
+          <p data-live>When the live room is open, sign in as <code>visitor</code> / <code>try-to-break-it</code>, sit in the deal room, and try ordering Acme's agent about. Switch will turn you away, politely.</p>
+          <a class="btn btn--quiet" data-live-link href="https://github.com/Ishaan-Gpt/handshake#run-it-about-10-minutes-docker-required"><span>Open the live room</span></a>
+        </article>
+        <article class="way" data-reveal>
+          <svg aria-hidden="true"><use href="#i-table"/></svg>
+          <h3>Run your own deal</h3>
+          <p>Switch, Mattermost, both companies, their agents, rooms and rules, in one command on any machine with Docker.</p>
+          <div class="cmd" data-cmd><code>git clone https://github.com/Ishaan-Gpt/handshake
+cd handshake &amp;&amp; python scripts/up.py
+python -m handshake.negotiator acme
+python -m handshake.negotiator globex</code><button type="button" class="copy" aria-label="Copy the commands"><svg aria-hidden="true"><use href="#i-copy"/></svg></button></div>
+        </article>
+        <article class="way" data-reveal>
+          <svg aria-hidden="true"><use href="#i-plug"/></svg>
+          <h3>Bring your own agent</h3>
+          <p>Seat Claude Code, Cursor or any MCP client in Globex's chair. It gets Switch's room tools through its own key, and the same walls.</p>
+          <div class="cmd" data-cmd><code>python scripts/seat.py globex
+# prints, with your seat's key:
+claude mcp add handshake-globex --transport http \
+  http://localhost:8000/mcp/ --header "Authorization: Bearer &lt;key&gt;"</code><button type="button" class="copy" aria-label="Copy the commands"><svg aria-hidden="true"><use href="#i-copy"/></svg></button></div>
+        </article>
+      </div>
+      <p class="links" data-reveal><a href="https://github.com/Ishaan-Gpt/handshake">The code</a><a href="https://github.com/Ishaan-Gpt/handshake/blob/main/docs/BLOG.md">How it was built</a><a href="https://github.com/sandbox-quantum/switch">Switch</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="goodnight">
+  <canvas class="goodnight__plan" data-night aria-hidden="true"></canvas>
+  <p class="big">Deal agreed at <em>$1.95M.</em></p>
+  <p class="fine">Built for WeMakeDevs' Flip the Switch. Acme Robotics and Globex Logistics are made up; every message on this page is real, recorded from Switch. MIT licence.</p>
+</footer>
+
+<div class="toast" data-toast role="status"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-mark" viewBox="0 0 32 32"><path d="M4 9h9v14H4zM19 9h9v14h-9z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M13 16h6" stroke="currentColor" stroke-width="1.4" stroke-dasharray="1.6 1.6"/><circle cx="8.5" cy="16" r="1.6" fill="currentColor"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v13M6.5 12.5 12 18l5.5-5.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 32 32"><path d="M3 16s5-8 13-8 13 8 13 8-5 8-13 8S3 16 3 16Z" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="16" cy="16" r="4" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+  <symbol id="i-table" viewBox="0 0 32 32"><path d="M4 13h24M7 13v11M25 13v11M10 9h12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 32 32"><path d="M11 4v7M21 4v7M8 11h16v4a8 8 0 0 1-16 0v-4ZM16 23v5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><path d="M8 8h11v11H8zM5 16V5h11" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+  <symbol id="i-owner" viewBox="0 0 32 32"><circle cx="16" cy="11" r="5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M6 27c1.5-6 5.5-9 10-9s8.5 3 10 9" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+  <symbol id="i-link" viewBox="0 0 32 32"><path d="M5 10h8v12H5zM19 10h8v12h-8zM13 16h6" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+  <symbol id="i-gate" viewBox="0 0 32 32"><path d="M6 27V9a10 10 0 0 1 20 0v18M6 27h20M16 13v6" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+  <symbol id="i-wall" viewBox="0 0 32 32"><path d="M5 6h22v20H5zM5 13h22M5 20h22M12 6v7M20 13v7M12 20v6" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 32 32"><path d="M8 4h11l5 5v19H8z M19 4v5h5 M12 15h8M12 19h8M12 23h5" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+  <symbol id="i-room" viewBox="0 0 32 32"><path d="M4 27V8l12-4 12 4v19M4 27h24M13 27v-8h6v8" fill="none" stroke="currentColor" stroke-width="1.3"/></symbol>
+  <symbol id="i-wire" viewBox="0 0 32 32"><path d="M4 16h6l3-7 6 14 3-7h6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></symbol>
+  <symbol id="i-rewind" viewBox="0 0 32 32"><path d="M8 9v6h6M8.6 15A9 9 0 1 1 9 21" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+</svg>
+
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/scrolltrigger.min.js" defer></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/app.js?v=1" defer></script>
+</body>
+</html>

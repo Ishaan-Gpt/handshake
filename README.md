@@ -12,7 +12,7 @@ every move.
 20**, and against Acme's own bot with its playbook in its prompt, **8 to 9 times out of 20**
 (qwen2.5 1.5B and 3B, same "never reveal" instruction; [results/](results/)).
 
-Demo video: _link added on submission_ · Blog: [docs/BLOG.md](docs/BLOG.md) · Built for WeMakeDevs' Flip the Switch hackathon, Track 01 (Business Workflow).
+**Site:** https://ishaan-gpt.github.io/handshake/ (the real deal, replayed by your scroll) · Demo video: _link added on submission_ · Blog: [docs/BLOG.md](docs/BLOG.md) · Built for WeMakeDevs' Flip the Switch hackathon, Track 01 (Business Workflow).
 
 ## What happens
 
@@ -124,6 +124,28 @@ The brain that words messages is `HANDSHAKE_BRAIN=ollama` (default, `qwen2.5:3b`
 `python -m pytest tests` (10 tests: the strategy never crosses a walk-away, the agent ignores what Switch didn't
 address to it, waits for its own human's yes, never lets the model change the number, and never answers an offer-less
 message at the table).
+
+## Bring your own agent (MCP)
+
+Switch serves every room operation as MCP tools at `/mcp/`, authenticated by an agent's own key, so any MCP client can
+take a seat at the table and stays inside the same walls (it can read its own war room and the table, and gets 403 on
+the other company's room):
+
+```bash
+python scripts/seat.py globex     # prints the Claude Code / Cursor config for Globex's seat, with its key
+```
+
+## Open the live room to anyone
+
+```bash
+cloudflared tunnel --url http://localhost:8065       # prints https://<random>.trycloudflare.com
+python scripts/public.py https://<random>.trycloudflare.com
+python scripts/live.py                               # a fresh deal every few minutes
+```
+
+Only Mattermost goes public (the Switch API, Gateway and database stay on localhost). Visitors sign in as
+`visitor` / `try-to-break-it`, sit in the deal room, and can try ordering an agent about; Switch refuses them because a
+visitor is nobody's owner. Put the URL in `site/data/live.json` and the site's "Watch it live" button points at it.
 
 ## What we learned building it
 

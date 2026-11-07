@@ -127,9 +127,11 @@ class Negotiator:
         if room == self.war:
             if self.pending and YES.match(body.replace(f"@{self.agent.name}", "")):
                 return self.send()
-            if self.closed:
-                return self.agent.say(self.war, "This deal is closed.")
             instruction = body.replace(f"@{self.agent.name}", "").strip().lower()
+            if instruction.startswith(("new deal", "reset", "open", "start")) and (self.closed or not self.mine):
+                self.mine, self.theirs, self.pending, self.closed = [], [], None, False  # a fresh deal
+            if self.closed:
+                return self.agent.say(self.war, "This deal is closed. Say **new deal** to start another.")
             if instruction.startswith(("open", "start", "begin")) or not self.mine:
                 return self.draft(next_move(self.pb, self.mine, self.theirs))
             if self.pending:  # the human asked for a change: redraft the same move with their words in mind
