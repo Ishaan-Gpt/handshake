@@ -58,7 +58,7 @@ flowchart LR
   PA -->|"strategy.py decides the number in plain code"| DRAFT["Draft + reasoning, shown in war room A"]
   DRAFT -->|"owner A replies yes"| TABLE
   TABLE -->|"offer, counter, accept"| WB
-  WB -. "agent B has no seat in war room A: 403" .-x WA
+  WB -. "agent B cannot enter war room A: 403" .-> WA
   TABLE --> CHECK["Leak check: table read back after every deal"]
 ```
 
