@@ -14,5 +14,5 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python -m compileall -q handshake scripts
       - run: python -m pytest -q tests
-      - name: Compose file is valid
-        run: cp deploy/.env.example deploy/.env && docker compose -f deploy/standalone-docker-compose.yml --env-file deploy/.env --profile collab --profile gateway config -q
+      - name: Compose file is valid with the secrets up.py writes
+        run: python -c "from scripts.up import env_file; env_file()" && docker compose -f deploy/standalone-docker-compose.yml --env-file deploy/.env --profile collab --profile gateway config -q
