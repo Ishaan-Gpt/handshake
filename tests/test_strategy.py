@@ -56,14 +56,23 @@ def test_money_is_rounded():
 def test_deal_report_reads_against_private_limits():
     from handshake.strategy import deal_report
     b = Playbook.from_terms("a", parse_terms(BUYER))
-    assert deal_report(b, 86_000) == "$86K is $4,000 inside your walk-away and $14K short of your target ($72K)."
+    assert deal_report(b, 86_000) == "$86K is $4K inside your walk-away and $14K short of your target ($72K)."
     assert "better than your target" in deal_report(b, 70_000)
     s = Playbook.from_terms("b", parse_terms(SELLER))
-    assert deal_report(s, 86_000) == "$86K is $8,000 inside your walk-away and $9,000 short of your target ($95K)."
+    assert deal_report(s, 86_000) == "$86K is $8K inside your walk-away and $9K short of your target ($95K)."
     assert "past your walk-away" in deal_report(s, 70_000)
 
 
-def test_accept_note_never_shows_in_the_other_sides_text():
+def test_accept_note_is_the_whole_private_explanation():
     pb = Playbook.from_terms("a", parse_terms(BUYER))
-    m = next_move(pb, [60_000, 67_500, 75_000, 82_500], [86_000 - 4_000])
-    assert m.kind == "accept" and "walk-away" in m.note
+    m = next_move(pb, [60_000, 67_500, 75_000, 82_500], [82_000])
+    assert m.kind == "accept" and m.price == 82_000
+    assert m.note == ("Their $82K is inside our next step ($90K), so accepting saves $8K against conceding further. "
+                      "$82K is $8K inside your walk-away and $10K short of your target ($72K).")
+
+
+def test_report_amounts_never_mix_styles():
+    from handshake.strategy import deal_report
+    pb = Playbook.from_terms("a", parse_terms(BUYER))
+    assert deal_report(pb, 84_500) == "$84.5K is $5.5K inside your walk-away and $12.5K short of your target ($72K)."
+    assert deal_report(pb, 86_000) == "$86K is $4K inside your walk-away and $14K short of your target ($72K)."
