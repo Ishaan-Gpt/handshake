@@ -24,6 +24,19 @@ the other side can talk it into repeating. Handshake runs inside the team chat y
 got it out. The same 20 against a shared deal bot, and against your own bot with your limits in its prompt, leaked it
 **6 and 11 times out of 20** (qwen2.5 3B, same "never reveal" instruction; [results/](results/)).
 
+## For judges, in two minutes
+
+- **Switch is the product, not a plug-in.** Rooms, linked tables, owner-only agents, addressing policy, room documents,
+  the MCP endpoint and the stream cursor each carry a part of the deal (table below). Take Switch away and there is no
+  deal room, no private room and no wall.
+- **Reproduce it.** `pip install -r requirements.txt && python -m pytest tests` (11 tests, run by CI on every push:
+  ![tests](https://github.com/Ishaan-Gpt/handshake/actions/workflows/tests.yml/badge.svg)). The full stack is
+  `python scripts/up.py` (Docker); `python scripts/demo.py` plays a whole deal by itself.
+- **The claim is measured.** 20 attacks x 4 routes, raw output in `results/`; the baselines use the same "never
+  reveal" instruction.
+- **Where to read the code that matters:** the strategy that never sees a model (`handshake/strategy.py`), the rules
+  that parse terms (`handshake/terms.py`), the agent loop and cursor (`handshake/agentloop.py`).
+
 ## Where it runs
 
 The chat is **Mattermost**, the team chat Switch bundles when you self-host it, and one of the apps the hackathon lists
